@@ -14,7 +14,7 @@ model User {
   discord    String      @db.VarChar(50)
   birthday   DateTime    @map("day_of_birth") @db.Timestamptz(6)
   tshirtSize TshirtSizes
-  fullName   String?     @map("full_name") @db.VarChar(50)
+  fullName   String      @map("full_name") @db.VarChar(50)
   enabled    Boolean     @default(false)
   leading    Team?       @relation("LeadCategory")
   team       Team?       @relation("DevCategory", fields: [teamId], references: [id])
@@ -41,8 +41,8 @@ model TimeOff {
   id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String       @db.Uuid
   user      User         @relation(references: [id], fields: [userId])
-  startDate DateTime?    @map("start_date") @db.Timestamptz(6)
-  endDate   DateTime?    @map("end_date") @db.Timestamptz(6)
+  startDate DateTime     @map("start_date") @db.Timestamptz(6)
+  endDate   DateTime     @map("end_date") @db.Timestamptz(6)
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
@@ -52,7 +52,7 @@ model TimeOff {
 model Celebration {
   id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   occasion  OccasionTypes
-  startDate DateTime?     @map("start_date") @db.Timestamptz(6)
+  startDate DateTime      @map("start_date") @db.Timestamptz(6)
   enabled   Boolean       @default(true)
 }
 
