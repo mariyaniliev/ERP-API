@@ -7,28 +7,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  user   User    @relation(fields: [userId], references: [id])
-}
-
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email      String      @db.VarChar(50)
+  phone      String      @db.VarChar(50)
+  discord    String      @db.VarChar(50)
+  birthday   DateTime    @map("day_of_birth") @db.Timestamptz(6)
+  tshirtSize TshirtSizes
+  fullName   String?     @map("full_name") @db.VarChar(50)
+  enabled    Boolean     @default(false)
+  leading    Team?       @relation("LeadCategory")
+  team       Team?       @relation("DevCategory", fields: [teamId], references: [id])
+  teamId     String?     @db.Uuid
+  timeOffs   TimeOff[]
+
+  @@unique([teamId])
+  @@map("user")
+}
+
+model Team {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  leadId     String    @map("lead_id") @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  lead       User      @relation("LeadCategory", fields: [leadId], references: [id])
+  developers User[]    @relation("DevCategory")
+
+  @@unique([leadId])
+  @@map("teams")
+}
+
+model TimeOff {
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String       @db.Uuid
+  user      User         @relation(references: [id], fields: [userId])
+  startDate DateTime?    @map("start_date") @db.Timestamptz(6)
+  endDate   DateTime?    @map("end_date") @db.Timestamptz(6)
+  approved  Boolean      @default(false)
+  uploaded  Boolean      @default(false)
+  type      TimeOffTypes
+
+}
+
+model Celebration {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  occasion  OccasionTypes
+  startDate DateTime?     @map("start_date") @db.Timestamptz(6)
+  enabled   Boolean       @default(true)
+}
+
+enum TshirtSizes {
+  XXS
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+
+  @@map("tshirt_sizes")
+}
+
+enum TimeOffTypes {
+  paid
+  unpaid
+  sick
+  motherhood
+  paternity
+
+  @@map("time_off_types")
+}
+
+enum OccasionTypes {
+  birthday
+  nameday
+  other
+
+  @@map("occasion_types")
 }
