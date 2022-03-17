@@ -8,18 +8,19 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email      String      @db.VarChar(50)
-  phone      String      @db.VarChar(50)
-  discord    String      @db.VarChar(50)
-  birthday   DateTime    @map("day_of_birth") @db.Timestamptz(6)
+  id         String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email      String         @db.VarChar(50)
+  phone      String         @db.VarChar(50)
+  discord    String         @db.VarChar(50)
+  birthday   DateTime       @map("day_of_birth") @db.Timestamptz(6)
   tshirtSize TshirtSizes
-  fullName   String      @map("full_name") @db.VarChar(50)
-  enabled    Boolean     @default(false)
-  leading    Team?       @relation("LeadCategory")
-  team       Team?       @relation("DevCategory", fields: [teamId], references: [id])
-  teamId     String?     @db.Uuid
+  fullName   String         @map("full_name") @db.VarChar(50)
+  enabled    Boolean        @default(false)
   timeOffs   TimeOff[]
+  authority  AuthorityTypes @default(User)
+  teamId     String?        @db.Uuid
+  leading    Team?          @relation("LeadCategory")
+  team       Team?          @relation("DevCategory", fields: [teamId], references: [id])
 
   @@unique([teamId])
   @@map("user")
@@ -40,12 +41,12 @@ model Team {
 model TimeOff {
   id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId    String       @db.Uuid
-  user      User         @relation(references: [id], fields: [userId])
   startDate DateTime     @map("start_date") @db.Timestamptz(6)
   endDate   DateTime     @map("end_date") @db.Timestamptz(6)
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
+  user      User         @relation(references: [id], fields: [userId])
 
 }
 
@@ -83,6 +84,15 @@ enum OccasionTypes {
   birthday
   nameday
   other
+
+  @@map("occasion_types")
+}
+
+enum AuthorityTypes {
+  Admin
+  User
+  Accounting
+  HR
 
   @@map("occasion_types")
 }
