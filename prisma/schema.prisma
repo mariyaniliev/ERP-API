@@ -39,7 +39,8 @@ model User {
   team       Team?          @relation("DevCategory", fields: [teamId], references: [id])
   session    Session?
 
-  @@unique([teamId, email])
+  @@unique([teamId])
+  @@unique([email])
   @@map("users")
 }
 
