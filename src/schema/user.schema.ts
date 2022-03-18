@@ -8,13 +8,8 @@ export const createUserSchema = object({
     password: string({
       required_error: 'Password is required',
     }).min(6, 'Password too short - min 6 chars'),
-    email: string({ required_error: 'Email is required' }).email(
-      'Not a valid email',
-    ),
+    email: string({ required_error: 'Email is required' }).email('Not a valid email'),
   }),
 })
 
-export type CreateUserInput = Omit<
-  TypeOf<typeof createUserSchema>,
-  'body.passwordConfirmation'
->
+export type CreateUserInput = Omit<TypeOf<typeof createUserSchema>, 'body.passwordConfirmation'>
