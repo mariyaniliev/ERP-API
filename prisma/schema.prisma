@@ -7,53 +7,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//  Authentication
 model Session {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   valid     Boolean   @default(true)
-  userId    String    @unique @db.Uuid
+  userId    String    @db.Uuid
   userAgent String    @db.VarChar(50)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  user      User      @relation(fields: [userId], references: [id])
 
   @@map("sessions")
 }
 
 model User {
   id         String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email      String         @db.VarChar(50)
+  email      String         @unique @db.VarChar(50)
   name       String         @db.VarChar(50)
   password   String         @db.VarChar(15)
   enabled    Boolean        @default(false)
-  timeOffs   TimeOff[]
   authority  AuthorityTypes @default(User)
-  teamId     String?        @db.Uuid
+  teamId     String?        @unique @db.Uuid
   createdAt  DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
   phone      String?        @db.VarChar(50)
   discord    String?        @db.VarChar(50)
   birthday   DateTime?      @map("day_of_birth") @db.Timestamptz(6)
   tshirtSize TshirtSizes?
-  leading    Team?          @relation("LeadCategory")
   team       Team?          @relation("DevCategory", fields: [teamId], references: [id])
-  session    Session?
+  leading    Team?          @relation("LeadCategory")
+  timeOffs   TimeOff[]
 
-  @@unique([teamId])
-  @@unique([email])
   @@map("users")
 }
 
-// Resources
 model Team {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  leadId     String    @map("lead_id") @db.Uuid
+  leadId     String    @unique @map("lead_id") @db.Uuid
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   lead       User      @relation("LeadCategory", fields: [leadId], references: [id])
-  developers User[]    @relation("DevCategory")
+  developers User?     @relation("DevCategory")
 
-  @@unique([leadId])
   @@map("teams")
 }
 
@@ -65,7 +58,7 @@ model TimeOff {
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
-  user      User         @relation(references: [id], fields: [userId])
+  user      User         @relation(fields: [userId], references: [id])
 
   @@map("timeoffs")
 }
@@ -116,5 +109,5 @@ enum AuthorityTypes {
   Accounting
   HR
 
-  @@map("occasion_types")
+  @@map("authority_types")
 }

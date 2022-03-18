@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from "express";
 
 export const requireUser = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
-  const user = res.locals.user
+  const user = res.locals.user;
 
-  if (!user) return res.sendStatus(403)
+  if (!user) return res.sendStatus(403);
 
-  return next()
-}
+  return next();
+};
