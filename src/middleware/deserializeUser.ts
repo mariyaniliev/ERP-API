@@ -7,7 +7,6 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
   const accessToken = get(req, 'headers.authorization', '').replace(/^Bearer\s/, '')
 
   const refreshToken = get(req, 'headers.x-refresh', '').replace(/^Bearer\s/, '')
-
   if (!accessToken) {
     return next()
   }

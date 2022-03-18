@@ -14,7 +14,7 @@ export default function routes(app: Express) {
   app.get('/healtcheck', (req: Request, res: Response) => {
     res.sendStatus(200)
   })
-
+  // Authentication
   app.post('/api/users', validateResource(createUserSchema), createUserHandler)
   app.post('/api/sessions', validateResource(createSessionSchema), createUserSessionHandler)
   app.get('/api/sessions', requireUser, getUserSessionHandler)

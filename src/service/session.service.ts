@@ -1,5 +1,5 @@
 import { PrismaClient, Session, Prisma } from '@prisma/client'
-
+import logger from '../utils/logger'
 import { get } from 'lodash'
 import { verifyJwt, signJwt } from '../utils/jwt.utils'
 import { findUser } from './user.service'
@@ -14,7 +14,7 @@ export async function createSession(userId: string, userAgent: string): Promise<
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        console.log('There is a unique constraint violation, a new user cannot be created with this email')
+        logger.error('There is a unique constraint violation, a new user cannot be created with this email')
       }
     }
     throw e
@@ -52,7 +52,7 @@ export async function reIssueAccessToken(token: string): Promise<string | false>
 
   if (!user) return false
 
-  const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: '15m' })
+  const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: process.env.JWT_TOKEN_TTL })
 
   return accessToken
 }
