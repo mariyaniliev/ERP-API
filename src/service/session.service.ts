@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { get } from 'lodash'
 import { verifyJwt, signJwt } from '../utils/jwt.utils'
 import { findUser } from './user.service'
@@ -11,14 +12,14 @@ export async function createSession(userId: string, userAgent: string) {
   return session
 }
 
-export async function findSession(query: any) {
+export async function findSession(query: { userId: string; valid: boolean }) {
   const session = await prisma.session.findMany({
     where: query,
   })
   return session
 }
 
-export async function updateSession(query: any, input: any) {
+export async function updateSession(query: { id: string }, input: Prisma.SessionUpdateInput) {
   const newSession = await prisma.session.update({
     where: query,
     data: input,
