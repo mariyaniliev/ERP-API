@@ -17,5 +17,3 @@ services:
       - POSTGRES_USER=postgres
     ports:
       - '${DB_PORT?}:${DB_PORT?}'
-
-

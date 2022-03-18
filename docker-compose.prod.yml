@@ -1,11 +1,10 @@
 version: '3.7'
 services:
   node-app:
-    build: 
+    build:
       context: .
       args:
         NODE_ENV: production
     environment:
-      - NODE_ENV=production 
-    command: npm run start   
-
+      - NODE_ENV=production
+    command: npm run start
