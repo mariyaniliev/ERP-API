@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from 'jsonwebtoken'
 
-export function signJwt(object: Object, options?: SignOptions | undefined) {
+export function signJwt(object: Record<string, unknown>, options?: SignOptions | undefined) {
   return jwt.sign(object, 'shhhhh', {
     ...(options && options),
   })
@@ -15,10 +15,11 @@ export function verifyJwt(token: string) {
       expired: false,
       decoded,
     }
-  } catch (error: any) {
+  } catch (error) {
+    const typedError = error as Error
     return {
       valid: false,
-      expired: error.message === 'jwt expired',
+      expired: typedError?.message === 'jwt expired',
       decoded: null,
     }
   }

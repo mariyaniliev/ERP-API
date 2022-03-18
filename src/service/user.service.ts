@@ -1,7 +1,6 @@
 import { omit } from 'lodash'
 import bcrypt from 'bcrypt'
-import { PrismaClient, User } from '@prisma/client'
-import { Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -9,8 +8,13 @@ export async function createUser(input: Prisma.UserCreateInput): Promise<User> {
   try {
     const user = await prisma.user.create({ data: input })
     return user
-  } catch (error: any) {
-    throw new Error(error)
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') {
+        console.log('There is a unique constraint violation, a new user cannot be created with this email')
+      }
+    }
+    throw e
   }
 }
 

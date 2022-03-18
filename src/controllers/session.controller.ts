@@ -10,7 +10,7 @@ export async function createUserSessionHandler(req: Request, res: Response) {
 
   const session = await createSession(user.id, req.get('user-agent') || '')
 
-  const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: '15' })
+  const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: '-1' })
 
   const refreshToken = signJwt({ ...user, session: session.id }, { expiresIn: '1y' })
 
