@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node -r esm src/app.ts",
-    "dev": "nodemon -L --exec npx ts-node src/app.ts"
+    "dev": "nodemon -L --exec npx ts-node src/app.ts",
+    "format": "prettier --write . && prettier --check .",
+    "lint": "eslint --fix . && eslint ."
   },
   "dependencies": {
     "@prisma/client": "^3.11.0",
@@ -36,7 +38,12 @@
     "@types/lodash": "^4.14.180",
     "@types/nanoid": "^3.0.0",
     "@types/pino": "^7.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "nodemon": "^2.0.15",
+    "prettier": "^2.6.0",
     "prisma": "^3.11.0",
     "ts-node-dev": "^1.1.8"
   }
