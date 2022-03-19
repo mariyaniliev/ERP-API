@@ -7,35 +7,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email      String         @db.VarChar(50)
-  phone      String         @db.VarChar(50)
-  discord    String         @db.VarChar(50)
-  birthday   DateTime       @map("day_of_birth") @db.Timestamptz(6)
-  tshirtSize TshirtSizes
-  fullName   String         @map("full_name") @db.VarChar(50)
-  enabled    Boolean        @default(false)
-  timeOffs   TimeOff[]
-  authority  AuthorityTypes @default(User)
-  teamId     String?        @db.Uuid
-  leading    Team?          @relation("LeadCategory")
-  team       Team?          @relation("DevCategory", fields: [teamId], references: [id])
+model Session {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  valid     Boolean   @default(true)
+  userId    String    @db.Uuid
+  userAgent String    @db.VarChar(50)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  @@unique([teamId])
-  @@map("user")
+  @@map("sessions")
 }
 
-model Team {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  leadId     String    @map("lead_id") @db.Uuid
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  lead       User      @relation("LeadCategory", fields: [leadId], references: [id])
-  developers User[]    @relation("DevCategory")
+model User {
+  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email       String         @unique @db.VarChar(50)
+  name        String         @db.VarChar(50)
+  password    String         @db.VarChar(80)
+  enabled     Boolean        @default(false)
+  authority   AuthorityTypes @default(User)
+  alcohol     alcoholTypes?
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  phone       String?        @db.VarChar(50)
+  discord     String?        @db.VarChar(50)
+  birthday    DateTime?      @map("day_of_birth") @db.Timestamptz(6)
+  tshirtSize  TshirtSizes?
+  leadId      String?        @db.Uuid
+  celebration Celebration[]
+  lead        Lead?
+  timeOffs    TimeOff[]
 
-  @@unique([leadId])
-  @@map("teams")
+  @@map("users")
+}
+
+model Lead {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  userId    String    @unique @db.Uuid
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("leads")
 }
 
 model TimeOff {
@@ -46,8 +58,9 @@ model TimeOff {
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
-  user      User         @relation(references: [id], fields: [userId])
+  user      User         @relation(fields: [userId], references: [id])
 
+  @@map("timeoffs")
 }
 
 model Celebration {
@@ -55,6 +68,10 @@ model Celebration {
   occasion  OccasionTypes
   startDate DateTime      @map("start_date") @db.Timestamptz(6)
   enabled   Boolean       @default(true)
+  userId    String        @db.Uuid
+  user      User          @relation(fields: [userId], references: [id])
+
+  @@map("celebrations")
 }
 
 enum TshirtSizes {
@@ -94,5 +111,19 @@ enum AuthorityTypes {
   Accounting
   HR
 
-  @@map("occasion_types")
+  @@map("authority_types")
+}
+
+enum alcoholTypes {
+  Whiskey
+  Vodka
+  Beer
+  Wine
+  Rum
+  Tequila
+  Absinthe
+  Gin
+  other
+
+  @@map("alcohol_types")
 }
