@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from 'zod'
+import { object, string } from 'zod'
 
 export const createUserSchema = object({
   body: object({
@@ -11,5 +11,3 @@ export const createUserSchema = object({
     email: string({ required_error: 'Email is required' }).email('Not a valid email'),
   }),
 })
-
-export type CreateUserInput = Omit<TypeOf<typeof createUserSchema>, 'body.passwordConfirmation'>

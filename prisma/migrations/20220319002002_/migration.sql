@@ -10,6 +10,9 @@ CREATE TYPE "occasion_types" AS ENUM ('birthday', 'nameday', 'other');
 -- CreateEnum
 CREATE TYPE "authority_types" AS ENUM ('Admin', 'User', 'Accounting', 'HR');
 
+-- CreateEnum
+CREATE TYPE "alcohol_types" AS ENUM ('Whiskey', 'Vodka', 'Beer', 'Wine', 'Rum', 'Tequila', 'Absinthe', 'Gin', 'other');
+
 -- CreateTable
 CREATE TABLE "sessions" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -27,28 +30,29 @@ CREATE TABLE "users" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" VARCHAR(50) NOT NULL,
     "name" VARCHAR(50) NOT NULL,
-    "password" VARCHAR(15) NOT NULL,
+    "password" VARCHAR(80) NOT NULL,
     "enabled" BOOLEAN NOT NULL DEFAULT false,
     "authority" "authority_types" NOT NULL DEFAULT E'User',
-    "teamId" UUID,
+    "alcohol" "alcohol_types" NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
     "phone" VARCHAR(50),
     "discord" VARCHAR(50),
     "day_of_birth" TIMESTAMPTZ(6),
     "tshirtSize" "tshirt_sizes",
+    "leadId" UUID,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "teams" (
+CREATE TABLE "leads" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "lead_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
+    "userId" UUID NOT NULL,
 
-    CONSTRAINT "teams_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "leads_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -70,6 +74,7 @@ CREATE TABLE "celebrations" (
     "occasion" "occasion_types" NOT NULL,
     "start_date" TIMESTAMPTZ(6) NOT NULL,
     "enabled" BOOLEAN NOT NULL DEFAULT true,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "celebrations_pkey" PRIMARY KEY ("id")
 );
@@ -78,19 +83,13 @@ CREATE TABLE "celebrations" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_teamId_key" ON "users"("teamId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "teams_lead_id_key" ON "teams"("lead_id");
+CREATE UNIQUE INDEX "leads_userId_key" ON "leads"("userId");
 
 -- AddForeignKey
-ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "teams"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "teams" ADD CONSTRAINT "teams_lead_id_fkey" FOREIGN KEY ("lead_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "leads" ADD CONSTRAINT "leads_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "timeoffs" ADD CONSTRAINT "timeoffs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "celebrations" ADD CONSTRAINT "celebrations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AnyZodObject } from 'zod'
+import logger from '../utils/logger'
 export const validateResource = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
     schema.parse({
@@ -8,7 +9,9 @@ export const validateResource = (schema: AnyZodObject) => (req: Request, res: Re
       params: req.params,
     })
     next()
-  } catch (error: any) {
-    return res.status(400).send(error.errors)
+  } catch (error) {
+    const typedError = error as Error
+    logger.error(typedError)
+    return res.status(400).send(typedError?.message)
   }
 }
