@@ -26,6 +26,7 @@ This is needed first time only. We use [Prisma](https://www.prisma.io/) as Datab
 
 ```shell
 # Generate the prisma clients
+# This is needed if schema.prisma file is modified
 yarn prisma generate
 
 # Migrate your changes to database
@@ -36,5 +37,7 @@ yarn prisma migrate dev
 ## Create the Database Instance in Docker
 
 ```shell
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+docker-compose -d --build
 ```
+
+Happy coding !!!

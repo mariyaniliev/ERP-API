@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { createUser, getUsers } from '../service/user.service'
+import { createSession } from '../service/session.service'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
-import { createSession } from '../service/session.service'
 
 export async function createUserHandler(req: Request, res: Response) {
   try {
