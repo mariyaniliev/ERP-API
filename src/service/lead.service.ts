@@ -10,7 +10,7 @@ export async function createLead(leadId: string) {
 }
 
 export async function findLead(id: string) {
-  const lead = await prisma.lead.findFirst({ where: { id: id.trim() }, include: { user: true } })
+  const lead = await prisma.lead.findFirst({ where: { id }, include: { user: true } })
   return lead
 }
 
@@ -20,7 +20,7 @@ export async function getLeads() {
 }
 
 export async function updateLead(id: string, input: Prisma.LeadUpdateInput) {
-  const updatedLead = await prisma.lead.update({ where: { id: id.trim() }, data: input })
+  const updatedLead = await prisma.lead.update({ where: { id }, data: input })
   return updatedLead
 }
 

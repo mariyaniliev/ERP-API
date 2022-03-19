@@ -37,6 +37,7 @@ export async function updateSession(query: { id: string }, input: Prisma.Session
 }
 
 export async function reIssueAccessToken(token: string): Promise<string | false> {
+
   const { decoded } = verifyJwt(token)
 
   if (!decoded || !get(decoded, 'session')) {
@@ -45,6 +46,7 @@ export async function reIssueAccessToken(token: string): Promise<string | false>
   const session = await prisma.session.findFirst({
     where: { id: get(decoded, 'session') },
   })
+  
 
   if (!session || !session.valid) return false
 
