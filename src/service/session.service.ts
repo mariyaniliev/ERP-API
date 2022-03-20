@@ -13,27 +13,43 @@ export async function createSession(userId: string, userAgent: string): Promise<
     return session
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2002') {
-        logger.error('There is a unique constraint violation, a new user cannot be created with this email')
-      }
+      logger.error(e.code + ' : ' + e.message)
     }
     throw e
   }
 }
 
 export async function findSession(query: { userId: string; valid: boolean }): Promise<Session[]> {
-  const session = await prisma.session.findMany({
-    where: query,
-  })
-  return session
+  try {
+    const session = await prisma.session.findMany({
+      where: query,
+    })
+    return session
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function updateSession(query: { id: string }, input: Prisma.SessionUpdateInput): Promise<Session> {
-  const newSession = await prisma.session.update({
-    where: query,
-    data: input,
-  })
-  return newSession
+  try {
+    const newSession = await prisma.session.update({
+      where: query,
+      data: input,
+    })
+    return newSession
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function reIssueAccessToken(token: string): Promise<string | false> {

@@ -1,17 +1,34 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
 export async function createLead(userId: string) {
-  const createdLead = await prisma.lead.create({
-    data: { leaderInfo: { connect: { id: userId } } },
-  })
-  return createdLead
+  try {
+    const createdLead = await prisma.lead.create({
+      data: { leaderInfo: { connect: { id: userId } } },
+    })
+    return createdLead
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      logger.error(e.code + ' : ' + e.message)
+    }
+    throw e
+  }
 }
 
 export async function findLead(id: string) {
-  const lead = await prisma.lead.findFirst({ where: { id }, include: { leaderInfo: true } })
-  return lead
+  try {
+    const lead = await prisma.lead.findFirst({ where: { id }, include: { leaderInfo: true } })
+    return lead
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function getLeads() {
@@ -25,11 +42,29 @@ export async function getLeads() {
 }
 
 export async function updateLead(id: string, input: Prisma.LeadUpdateInput) {
-  const updatedLead = await prisma.lead.update({ where: { id }, data: input })
-  return updatedLead
+  try {
+    const updatedLead = await prisma.lead.update({ where: { id }, data: input })
+    return updatedLead
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function deleteLead(id: string) {
-  const deleted = await prisma.lead.delete({ where: { id } })
-  return deleted
+  try {
+    const deleted = await prisma.lead.delete({ where: { id } })
+    return deleted
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }

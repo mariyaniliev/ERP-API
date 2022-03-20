@@ -1,17 +1,34 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
 export async function createCelebration(input: Prisma.CelebrationCreateInput, userId: string) {
-  const createdCelebration = await prisma.celebration.create({
-    data: { ...input, user: { connect: { id: userId } } },
-  })
-  return createdCelebration
+  try {
+    const createdCelebration = await prisma.celebration.create({
+      data: { ...input, user: { connect: { id: userId } } },
+    })
+    return createdCelebration
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      logger.error(e.code + ' : ' + e.message)
+    }
+    throw e
+  }
 }
 
 export async function findCelebration(id: string) {
-  const celebration = await prisma.celebration.findFirst({ where: { id }, include: { user: true } })
-  return celebration
+  try {
+    const celebration = await prisma.celebration.findFirst({ where: { id }, include: { user: true } })
+    return celebration
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function getCelebrations() {
@@ -20,11 +37,29 @@ export async function getCelebrations() {
 }
 
 export async function updateCelebration(id: string, input: Prisma.CelebrationUpdateInput) {
-  const updatedCelebration = await prisma.celebration.update({ where: { id }, data: input })
-  return updatedCelebration
+  try {
+    const updatedCelebration = await prisma.celebration.update({ where: { id }, data: input })
+    return updatedCelebration
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
 export async function deleteCelebration(id: string) {
-  const deletedCelebration = await prisma.celebration.delete({ where: { id } })
-  return deletedCelebration
+  try {
+    const deletedCelebration = await prisma.celebration.delete({ where: { id } })
+    return deletedCelebration
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
