@@ -5,7 +5,7 @@ import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
-export async function createUser(input: Prisma.UserCreateInput, leadId: string): Promise<User> {
+export async function createUser(input: Prisma.UserCreateInput, leadId?: string): Promise<User> {
   // * leadId is primary key from User model
   const saltRounds = Number(process.env.SALT_ROUNDS)
   const salt = await bcrypt.genSalt(saltRounds)
@@ -72,31 +72,41 @@ export async function getUsers(): Promise<Omit<User, 'password' | 'leading'>[]> 
 }
 
 export async function findUser(query: { id: string }): Promise<User | null> {
-  const user = prisma.user.findFirst({
-    where: query,
-    include: {
-      lead: {
-        select: {
-          leaderInfo: {
-            select: {
-              name: true,
-              email: true,
-              discord: true,
+  try {
+    const user = prisma.user.findFirst({
+      where: query,
+      include: {
+        lead: {
+          select: {
+            leaderInfo: {
+              select: {
+                name: true,
+                email: true,
+                discord: true,
+              },
             },
           },
         },
+        celebration: true,
+        timeOffs: true,
       },
-      celebration: true,
-      timeOffs: true,
-    },
-  })
-  return omit(user, 'password')
+    })
+    return omit(user, 'password')
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
+    }
+    throw e
+  }
 }
 
-export async function updateUser(input: Prisma.UserCreateInput, leadId: string): Promise<User> {
+export async function updateUser(input: Prisma.UserUpdateInput, id: string, leadId?: string): Promise<User> {
   try {
     let query = input
     if (leadId) {
+      // HERE LEADID IS ACTUALLY THE ID OF THE USER MODEL
       const lead = await prisma.lead.findFirst({ where: { userId: leadId } })
       // * IF LEAD ID IS PROVIDED WHEN CREATING USER, WE NEED DIFFERENT QUERY TO CONNECT HIM TO THE RELATIVE MODEL
       query = { ...input, lead: { connect: { id: leadId } } }
@@ -108,10 +118,13 @@ export async function updateUser(input: Prisma.UserCreateInput, leadId: string):
       }
     }
 
-    const user = await prisma.user.update({ where: { email: input.email }, data: query })
+    const user = await prisma.user.update({ where: { id }, data: query })
     return user
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2015') {
+        logger.error('A related record could not be found.')
+      }
       if (e.code === 'P2002') {
         logger.error('There is a unique constraint violation, a new user cannot be created with this email')
       }

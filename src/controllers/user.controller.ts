@@ -1,13 +1,18 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { omit } from 'lodash'
-import { createUser, findUser, getUsers } from '../service/user.service'
+import { createUser, findUser, getUsers, updateUser } from '../service/user.service'
 import { createSession } from '../service/session.service'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
 
 export async function createUserHandler(
-  req: Request<Record<string, unknown>, Record<string, unknown>, Prisma.UserCreateInput, { leadId: string }>,
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Prisma.UserCreateInput,
+    { leadId: string | undefined }
+  >,
   res: Response
 ) {
   try {
@@ -33,6 +38,26 @@ export async function getUsersHandler(req: Request, res: Response) {
 }
 
 export async function getUserHandler(req: Request, res: Response) {
-  const users = await findUser({ id: req.params.id })
-  return res.send(users)
+  try {
+    const users = await findUser({ id: req.params.id })
+    return res.send(users)
+  } catch (error) {
+    const typedError = error as Prisma.PrismaClientKnownRequestError
+    logger.error(typedError)
+    return res.status(409).send(typedError?.message)
+  }
+}
+
+export async function updateUserHandler(
+  req: Request<{ id: string }, Record<string, unknown>, Prisma.UserUpdateInput, { leadId: string | undefined }>,
+  res: Response
+) {
+  try {
+    const users = await updateUser(req.body, req.params.id, req.query.leadId)
+    return res.send(users)
+  } catch (error) {
+    const typedError = error as Prisma.PrismaClientKnownRequestError
+    logger.error(typedError)
+    return res.status(409).send(typedError?.message)
+  }
 }
