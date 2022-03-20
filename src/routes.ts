@@ -68,11 +68,11 @@ export default function routes(app: Express) {
   // Return all leads
   app.get('/leads', requireUser, getLeadsHandler)
   // Return lead
-  app.get('/leads/:leadId', requireUser, getLeadHandler)
+  app.get('/leads/:id', requireUser, getLeadHandler)
   // Update lead
-  app.patch('/leads/:leadId', requireUser, updateLeadHandler)
+  app.patch('/leads/:id', requireUser, updateLeadHandler)
   // Delete lead
-  app.delete('/leads/:leadId', requireUser, deleteLeadHandler)
+  app.delete('/leads/:id', requireUser, deleteLeadHandler)
 
   // Add new time off
   app.post('/timeoffs', requireUser, createTimeOffHandler)

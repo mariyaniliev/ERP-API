@@ -19,14 +19,27 @@ export async function createLead(userId: string) {
 
 export async function findLead(id: string) {
   try {
-    const lead = await prisma.lead.findFirst({ where: { id }, include: { leaderInfo: true } })
+    const lead = await prisma.lead.findFirst({
+      where: { id },
+      include: {
+        leaderInfo: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            enabled: true,
+            authority: true,
+            phone: true,
+            discord: true,
+            createdAt: true,
+            updatedAt: true,
+            leadId: true,
+          },
+        },
+      },
+    })
     return lead
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }
@@ -46,11 +59,6 @@ export async function updateLead(id: string, input: Prisma.LeadUpdateInput) {
     const updatedLead = await prisma.lead.update({ where: { id }, data: input })
     return updatedLead
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }
@@ -60,11 +68,6 @@ export async function deleteLead(id: string) {
     const deleted = await prisma.lead.delete({ where: { id } })
     return deleted
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }

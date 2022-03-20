@@ -39,8 +39,9 @@ export async function getUsersHandler(req: Request, res: Response) {
 
 export async function getUserHandler(req: Request, res: Response) {
   try {
-    const users = await findUser({ id: req.params.id })
-    return res.send(users)
+    const user = await findUser({ id: req.params.id })
+
+    return res.send(user)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)

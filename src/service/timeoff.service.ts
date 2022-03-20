@@ -22,11 +22,6 @@ export async function findTimeOff(id: string) {
     const timeOff = await prisma.timeOff.findFirst({ where: { id }, include: { user: true } })
     return timeOff
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }
@@ -41,11 +36,7 @@ export async function updateTimeOff(id: string, input: Prisma.LeadUpdateInput) {
     const updatedTimeOff = await prisma.timeOff.update({ where: { id }, data: input })
     return updatedTimeOff
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
+    throw e
   }
 }
 
@@ -54,10 +45,6 @@ export async function deleteTimeOff(id: string) {
     const deletedTimeOff = await prisma.timeOff.delete({ where: { id } })
     return deletedTimeOff
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
+    throw e
   }
 }

@@ -26,11 +26,6 @@ export async function findSession(query: { userId: string; valid: boolean }): Pr
     })
     return session
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }

@@ -93,11 +93,6 @@ export async function findUser(query: { id: string }): Promise<User | null> {
     })
     return omit(user, 'password')
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
     throw e
   }
 }
@@ -122,9 +117,6 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
     return user
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
       if (e.code === 'P2002') {
         logger.error('There is a unique constraint violation, a new user cannot be created with this email')
       }
