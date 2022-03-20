@@ -2,7 +2,13 @@ import { Express, Request, Response } from 'express'
 /**
  * ! Controllers
  */
-import { createUserHandler, getUserHandler, getUsersHandler, updateUserHandler } from './controllers/user.controller'
+import {
+  createUserHandler,
+  deleteUserHandler,
+  getUserHandler,
+  getUsersHandler,
+  updateUserHandler,
+} from './controllers/user.controller'
 import { createUserSessionHandler, deleteSessionHandler, getUserSessionHandler } from './controllers/session.controller'
 import {
   createLeadHandler,
@@ -62,6 +68,8 @@ export default function routes(app: Express) {
   app.get('/users/:id', requireUser, getUserHandler)
   //Update user
   app.patch('/users/:id', requireUser, updateUserHandler)
+  //Delete user
+  app.delete('/users/:id', requireUser, deleteUserHandler)
 
   // Add new lead
   app.post('/leads', requireUser, createLeadHandler)

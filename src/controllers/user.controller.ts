@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { omit } from 'lodash'
-import { createUser, findUser, getUsers, updateUser } from '../service/user.service'
+import { createUser, deleteUser, findUser, getUsers, updateUser } from '../service/user.service'
 import { createSession } from '../service/session.service'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
@@ -56,6 +56,17 @@ export async function updateUserHandler(
   try {
     const users = await updateUser(req.body, req.params.id, req.query.leadId)
     return res.send(users)
+  } catch (error) {
+    const typedError = error as Prisma.PrismaClientKnownRequestError
+    logger.error(typedError)
+    return res.status(409).send(typedError?.message)
+  }
+}
+export async function deleteUserHandler(req: Request<{ id: string }>, res: Response) {
+  try {
+    const { id } = req.params
+    const deletedUser = await deleteUser(id)
+    return res.send(deletedUser)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)

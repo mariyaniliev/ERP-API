@@ -124,6 +124,16 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
     throw e
   }
 }
+
+export async function deleteUser(id: string) {
+  try {
+    const deletedUser = await prisma.user.delete({ where: { id } })
+    return deletedUser
+  } catch (e) {
+    throw e
+  }
+}
+
 export async function validatePassword({ email, password }: { email: string; password: string }) {
   const user = await prisma.user.findUnique({ where: { email } })
   if (!user) return false
