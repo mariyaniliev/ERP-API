@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { createTimeOff, deleteTimeOff, findTimeOff, getTimeOffs, updateTimeOff } from '../service/timeoff.service'
 export async function createTimeOffHandler(
-  req: Request<{ userId: string }, Record<string, unknown>, Prisma.TimeOffCreateInput>,
+  req: Request<Record<string, unknown>, Record<string, unknown>, Prisma.TimeOffCreateInput, { userId: string }>,
   res: Response
 ) {
-  const { userId } = req.params
-  const lead = await createTimeOff(req.body, userId)
+  const { userId } = req.query
+  const timeOff = await createTimeOff(req.body, userId)
 
-  return res.send(lead)
+  return res.send(timeOff)
 }
 export async function getTimeOffHandler(req: Request<{ id: string }>, res: Response) {
   const { id } = req.params

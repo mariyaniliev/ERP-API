@@ -2,10 +2,10 @@ import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { createLead, deleteLead, findLead, getLeads, updateLead } from '../service/lead.service'
 export async function createLeadHandler(
-  req: Request<Record<string, unknown>, Record<string, unknown>, { leadId: string }>,
+  req: Request<Record<string, unknown>, Record<string, unknown>, { userId: string }>,
   res: Response
 ) {
-  const lead = await createLead(req.body.leadId)
+  const lead = await createLead(req.body.userId)
 
   return res.send(lead)
 }

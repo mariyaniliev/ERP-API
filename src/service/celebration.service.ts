@@ -15,7 +15,7 @@ export async function findCelebration(id: string) {
 }
 
 export async function getCelebrations() {
-  const celebrations = await prisma.celebration.findMany({ include: { user: true } })
+  const celebrations = await prisma.celebration.findMany({ include: { user: { select: { name: true } } } })
   return celebrations
 }
 

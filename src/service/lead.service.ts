@@ -2,20 +2,25 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function createLead(leadId: string) {
+export async function createLead(userId: string) {
   const createdLead = await prisma.lead.create({
-    data: { user: { connect: { id: leadId } } },
+    data: { leaderInfo: { connect: { id: userId } } },
   })
   return createdLead
 }
 
 export async function findLead(id: string) {
-  const lead = await prisma.lead.findFirst({ where: { id }, include: { user: true } })
+  const lead = await prisma.lead.findFirst({ where: { id }, include: { leaderInfo: true } })
   return lead
 }
 
 export async function getLeads() {
-  const leads = await prisma.lead.findMany({ include: { user: true } })
+  const leads = await prisma.lead.findMany({
+    include: {
+      leaderInfo: { select: { name: true, email: true, discord: true } },
+      team: { select: { name: true, email: true, discord: true } },
+    },
+  })
   return leads
 }
 

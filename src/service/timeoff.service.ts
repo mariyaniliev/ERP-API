@@ -2,8 +2,8 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function createTimeOff(input: Prisma.CelebrationCreateInput, userId: string) {
-  const createdTimeOff = await prisma.lead.create({
+export async function createTimeOff(input: Prisma.TimeOffCreateInput, userId: string) {
+  const createdTimeOff = await prisma.timeOff.create({
     data: { ...input, user: { connect: { id: userId } } },
   })
   return createdTimeOff
@@ -15,7 +15,7 @@ export async function findTimeOff(id: string) {
 }
 
 export async function getTimeOffs() {
-  const timeOffs = await prisma.timeOff.findMany({ include: { user: true } })
+  const timeOffs = await prisma.timeOff.findMany({ include: { user: { select: { name: true } } } })
   return timeOffs
 }
 

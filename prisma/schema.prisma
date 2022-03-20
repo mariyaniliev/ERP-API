@@ -33,19 +33,21 @@ model User {
   birthday    DateTime?      @map("day_of_birth") @db.Timestamptz(6)
   tshirtSize  TshirtSizes?
   leadId      String?        @db.Uuid
+  lead        Lead?          @relation("LeadCategory", fields: [leadId], references: [id])
   celebration Celebration[]
-  lead        Lead?
+  leading     Lead?          @relation("LeadingCategory")
   timeOffs    TimeOff[]
 
   @@map("users")
 }
 
 model Lead {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  userId    String    @unique @db.Uuid
-  user      User      @relation(fields: [userId], references: [id])
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  userId     String    @unique @db.Uuid
+  leaderInfo User      @relation("LeadingCategory", fields: [userId], references: [id])
+  team       User[]    @relation("LeadCategory")
 
   @@map("leads")
 }

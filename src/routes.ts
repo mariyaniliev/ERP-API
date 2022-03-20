@@ -2,7 +2,7 @@ import { Express, Request, Response } from 'express'
 /**
  * ! Controllers
  */
-import { createUserHandler, getUsersHandler } from './controllers/user.controller'
+import { createUserHandler, getUserHandler, getUsersHandler } from './controllers/user.controller'
 import { createUserSessionHandler, deleteSessionHandler, getUserSessionHandler } from './controllers/session.controller'
 import {
   createLeadHandler,
@@ -51,13 +51,18 @@ export default function routes(app: Express) {
   // Login session
   app.post('/sessions', validateResource(createSessionSchema), createUserSessionHandler)
   app.get('/sessions', requireUser, getUserSessionHandler)
+  // Logout
   app.delete('/sessions', requireUser, deleteSessionHandler)
   /**
    * * RESOURCES
    */
   // Return all users
   app.get('/users', requireUser, getUsersHandler)
-  
+  // Returns user
+  app.get('/users/:id', requireUser, getUserHandler)
+  /*   //Update user
+  app.patch('/users/:id') */
+
   // Add new lead
   app.post('/leads', requireUser, createLeadHandler)
   // Return all leads
