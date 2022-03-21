@@ -48,8 +48,17 @@ export async function createUser(input: Prisma.UserCreateInput, leadId?: string)
   }
 }
 
-export async function getUsers(): Promise<Omit<User, 'password' | 'leading'>[]> {
+export async function getUsers(query: {
+  page: string
+  limit: string
+}): Promise<{ data: Omit<User, 'password' | 'leading'>[]; resultsCount: number }> {
+  const page = Number(query.page) | 1
+  const limit = Number(query.limit) | 10
+  const startIndex = (page - 1) * limit
+  const resultsCount = await prisma.user.count()
   const users = await prisma.user.findMany({
+    skip: startIndex,
+    take: limit,
     select: {
       id: true,
       email: true,
@@ -79,7 +88,7 @@ export async function getUsers(): Promise<Omit<User, 'password' | 'leading'>[]> 
       timeOffs: true,
     },
   })
-  return users
+  return { data: users, resultsCount }
 }
 
 export async function findUser(query: { id: string }): Promise<User | null> {

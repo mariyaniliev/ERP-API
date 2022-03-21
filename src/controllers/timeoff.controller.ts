@@ -3,11 +3,11 @@ import { Prisma } from '@prisma/client'
 import { createTimeOff, deleteTimeOff, findTimeOff, getTimeOffs, updateTimeOff } from '../service/timeoff.service'
 import logger from '../utils/logger'
 export async function createTimeOffHandler(
-  req: Request<Record<string, unknown>, Record<string, unknown>, Prisma.TimeOffCreateInput, { userId: string }>,
+  req: Request<{ userId: string }, Record<string, unknown>, Prisma.TimeOffCreateInput>,
   res: Response
 ) {
   try {
-    const { userId } = req.query
+    const { userId } = req.params
     const timeOff = await createTimeOff(req.body, userId)
 
     return res.send(timeOff)
@@ -29,8 +29,16 @@ export async function getTimeOffHandler(req: Request<{ id: string }>, res: Respo
   }
 }
 
-export async function getTimeOffsHandler(req: Request, res: Response) {
-  const timeOffs = await getTimeOffs()
+export async function getTimeOffsHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { page: string; limit: string }
+  >,
+  res: Response
+) {
+  const timeOffs = await getTimeOffs(req.query)
   return res.send(timeOffs)
 }
 

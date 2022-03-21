@@ -1,7 +1,8 @@
 import { get } from 'lodash'
-import { verifyJwt } from '../utils/jwt.utils'
 import { Request, Response, NextFunction } from 'express'
+import { Prisma } from '@prisma/client'
 import { reIssueAccessToken } from '../service/session.service'
+import { verifyJwt } from '../utils/jwt.utils'
 
 export const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
   const accessToken = get(req, 'headers.authorization', '').replace(/^Bearer\s/, '')
@@ -19,15 +20,20 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
   }
 
   if (expired && refreshToken) {
-    const newAccessToken = await reIssueAccessToken(refreshToken)
-    if (newAccessToken) {
-      res.setHeader('x-access-token', newAccessToken)
+    try {
+      const newAccessToken = await reIssueAccessToken(refreshToken)
+      if (newAccessToken) {
+        res.setHeader('x-access-token', newAccessToken)
 
-      const result = verifyJwt(newAccessToken)
+        const result = verifyJwt(newAccessToken)
 
-      res.locals.user = result.decoded
+        res.locals.user = result.decoded
 
-      return next()
+        return next()
+      }
+    } catch (error) {
+      const typedError = error as Prisma.PrismaClientKnownRequestError
+      res.sendStatus(404).send(typedError.message)
     }
   }
 

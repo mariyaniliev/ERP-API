@@ -83,9 +83,6 @@ CREATE TABLE "celebrations" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_leadId_key" ON "users"("leadId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "leads_userId_key" ON "leads"("userId");
 
 -- AddForeignKey

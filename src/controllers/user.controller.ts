@@ -16,7 +16,6 @@ export async function createUserHandler(
   res: Response
 ) {
   try {
-
     const user = await createUser(req.body, req.query.leadId)
 
     const session = await createSession(user.id, req.get('user-agent') || '')
@@ -33,8 +32,16 @@ export async function createUserHandler(
   }
 }
 
-export async function getUsersHandler(req: Request, res: Response) {
-  const users = await getUsers()
+export async function getUsersHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { page: string; limit: string }
+  >,
+  res: Response
+) {
+  const users = await getUsers(req.query)
   return res.send(users)
 }
 

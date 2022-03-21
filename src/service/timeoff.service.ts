@@ -22,9 +22,23 @@ export async function findTimeOff(id: string) {
   return timeOff
 }
 
-export async function getTimeOffs() {
-  const timeOffs = await prisma.timeOff.findMany({ include: { user: { select: { name: true } } } })
-  return timeOffs
+export async function getTimeOffs(query: { page: string; limit: string }) {
+  const page = Number(query.page) | 1
+  const limit = Number(query.limit) | 10
+  const startIndex = (page - 1) * limit
+  const resultsCount = await prisma.timeOff.count()
+  const timeOffs = await prisma.timeOff.findMany({
+    skip: startIndex,
+    take: limit,
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  })
+  return { data: timeOffs, resultsCount }
 }
 
 export async function updateTimeOff(id: string, input: Prisma.LeadUpdateInput) {

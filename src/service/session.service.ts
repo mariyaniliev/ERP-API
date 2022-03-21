@@ -45,10 +45,10 @@ export async function updateSession(query: { id: string }, input: Prisma.Session
 
 export async function reIssueAccessToken(token: string): Promise<string | false> {
   const { decoded } = verifyJwt(token)
-
   if (!decoded || !get(decoded, 'session')) {
     return false
   }
+
   const session = await prisma.session.findFirst({
     where: { id: get(decoded, 'session') },
   })
@@ -56,7 +56,7 @@ export async function reIssueAccessToken(token: string): Promise<string | false>
   if (!session || !session.valid) return false
 
   const user = await findUser({ id: session.userId })
-
+  
   if (!user) return false
 
   const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: process.env.JWT_TOKEN_TTL })

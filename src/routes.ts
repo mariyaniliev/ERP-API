@@ -46,13 +46,13 @@ export default function routes(app: Express) {
   /**
    * * CHECKS IF SERVER IS UP
    */
-  app.get('/healtcheck', (req: Request, res: Response) => {
+  app.get('/healthcheck', (req: Request, res: Response) => {
     res.sendStatus(200)
   })
   /**
    * * AUTHENTICATION
    */
-  // Register
+  // Register // Accepts query "leadId"
   app.post('/users', validateResource(createUserSchema), createUserHandler)
   // Login session
   app.post('/sessions', validateResource(createSessionSchema), createUserSessionHandler)
@@ -66,13 +66,13 @@ export default function routes(app: Express) {
   app.get('/users', requireUser, getUsersHandler)
   // Returns user
   app.get('/users/:id', requireUser, getUserHandler)
-  //Update user
+  //Update user // Accepts query "leadId"
   app.patch('/users/:id', requireUser, updateUserHandler)
   //Delete user
   app.delete('/users/:id', requireUser, deleteUserHandler)
 
   // Add new lead
-  app.post('/leads', requireUser, createLeadHandler)
+  app.post('/leads/:userId', requireUser, createLeadHandler)
   // Return all leads
   app.get('/leads', requireUser, getLeadsHandler)
   // Return lead
@@ -83,7 +83,7 @@ export default function routes(app: Express) {
   app.delete('/leads/:id', requireUser, deleteLeadHandler)
 
   // Add new time off
-  app.post('/timeoffs', requireUser, createTimeOffHandler)
+  app.post('/timeoffs/:userId', requireUser, createTimeOffHandler)
   // Return all time off's
   app.get('/timeoffs', requireUser, getTimeOffsHandler)
   // Return time off

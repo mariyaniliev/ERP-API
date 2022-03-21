@@ -40,14 +40,20 @@ export async function findLead(id: string) {
   return lead
 }
 
-export async function getLeads() {
+export async function getLeads(query: { page: string; limit: string }) {
+  const page = Number(query.page) | 1
+  const limit = Number(query.limit) | 10
+  const startIndex = (page - 1) * limit
+  const resultsCount = await prisma.lead.count()
   const leads = await prisma.lead.findMany({
+    skip: startIndex,
+    take: limit,
     include: {
       leadInfo: { select: { name: true, email: true, discord: true } },
       team: { select: { name: true, email: true, discord: true } },
     },
   })
-  return leads
+  return { data: leads, resultsCount }
 }
 
 export async function updateLead(id: string, input: Prisma.LeadUpdateInput) {
