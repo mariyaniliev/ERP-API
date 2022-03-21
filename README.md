@@ -4,7 +4,7 @@
 </p></h1>
 
 <p align="center">
-  <a href="https://genericsoft.bg/" target="blank"><img src="https://media-exp1.licdn.com/dms/image/C4D0BAQGICTRcAXWpSw/company-logo_200_200/0/1625574654319?e=1655942400&v=beta&t=wRhYFavVRCCf3Lti3-9gdEjziP36uz88pk7bf-WrfRA" width="320" alt="generic-soft logo" /></a>
+  <a href="https://genericsoft.bg/" target="blank"><img src="https://ibb.co/NYTZ0HV" width="320" alt="generic-soft logo" /></a>
 </p>
 
 ## Initial setup
@@ -20,6 +20,12 @@ yarn
 yarn dev
 ```
 
+## Create the Database Instance in Docker
+
+```shell
+docker-compose -d --build
+```
+
 ## Initialize the Database with Prisma Migration scripts
 
 This is needed first time only. We use [Prisma](https://www.prisma.io/) as Database management and versioning tool the following migration command will init the database from the schema.prisma file. See Database Development Guidelines below for further details.
@@ -32,12 +38,6 @@ yarn prisma generate
 # Migrate your changes to database
 yarn prisma migrate dev
 
-```
-
-## Create the Database Instance in Docker
-
-```shell
-docker-compose -d --build
 ```
 
 Happy coding !!!
