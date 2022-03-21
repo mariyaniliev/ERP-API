@@ -18,12 +18,8 @@ export async function createTimeOff(input: Prisma.TimeOffCreateInput, userId: st
 }
 
 export async function findTimeOff(id: string) {
-  try {
-    const timeOff = await prisma.timeOff.findFirst({ where: { id }, include: { user: true } })
-    return timeOff
-  } catch (e) {
-    throw e
-  }
+  const timeOff = await prisma.timeOff.findFirst({ where: { id }, include: { user: true } })
+  return timeOff
 }
 
 export async function getTimeOffs() {
@@ -32,19 +28,11 @@ export async function getTimeOffs() {
 }
 
 export async function updateTimeOff(id: string, input: Prisma.LeadUpdateInput) {
-  try {
-    const updatedTimeOff = await prisma.timeOff.update({ where: { id }, data: input })
-    return updatedTimeOff
-  } catch (e) {
-    throw e
-  }
+  const updatedTimeOff = await prisma.timeOff.update({ where: { id }, data: input })
+  return updatedTimeOff
 }
 
 export async function deleteTimeOff(id: string) {
-  try {
-    const deletedTimeOff = await prisma.timeOff.delete({ where: { id } })
-    return deletedTimeOff
-  } catch (e) {
-    throw e
-  }
+  const deletedTimeOff = await prisma.timeOff.delete({ where: { id } })
+  return deletedTimeOff
 }

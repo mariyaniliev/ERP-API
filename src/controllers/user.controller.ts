@@ -16,6 +16,7 @@ export async function createUserHandler(
   res: Response
 ) {
   try {
+
     const user = await createUser(req.body, req.query.leadId)
 
     const session = await createSession(user.id, req.get('user-agent') || '')
@@ -45,7 +46,7 @@ export async function getUserHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }
 
@@ -70,6 +71,6 @@ export async function deleteUserHandler(req: Request<{ id: string }>, res: Respo
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }

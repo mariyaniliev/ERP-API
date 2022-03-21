@@ -18,17 +18,8 @@ export async function createCelebration(input: Prisma.CelebrationCreateInput, us
 }
 
 export async function findCelebration(id: string) {
-  try {
-    const celebration = await prisma.celebration.findFirst({ where: { id }, include: { user: true } })
-    return celebration
-  } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      if (e.code === 'P2015') {
-        logger.error('A related record could not be found.')
-      }
-    }
-    throw e
-  }
+  const celebration = await prisma.celebration.findFirst({ where: { id }, include: { user: true } })
+  return celebration
 }
 
 export async function getCelebrations() {
@@ -37,19 +28,11 @@ export async function getCelebrations() {
 }
 
 export async function updateCelebration(id: string, input: Prisma.CelebrationUpdateInput) {
-  try {
-    const updatedCelebration = await prisma.celebration.update({ where: { id }, data: input })
-    return updatedCelebration
-  } catch (e) {
-    throw e
-  }
+  const updatedCelebration = await prisma.celebration.update({ where: { id }, data: input })
+  return updatedCelebration
 }
 
 export async function deleteCelebration(id: string) {
-  try {
-    const deletedCelebration = await prisma.celebration.delete({ where: { id } })
-    return deletedCelebration
-  } catch (e) {
-    throw e
-  }
+  const deletedCelebration = await prisma.celebration.delete({ where: { id } })
+  return deletedCelebration
 }

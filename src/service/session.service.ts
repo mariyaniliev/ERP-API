@@ -20,14 +20,10 @@ export async function createSession(userId: string, userAgent: string): Promise<
 }
 
 export async function findSession(query: { userId: string; valid: boolean }): Promise<Session[]> {
-  try {
-    const session = await prisma.session.findMany({
-      where: query,
-    })
-    return session
-  } catch (e) {
-    throw e
-  }
+  const session = await prisma.session.findMany({
+    where: query,
+  })
+  return session
 }
 
 export async function updateSession(query: { id: string }, input: Prisma.SessionUpdateInput): Promise<Session> {

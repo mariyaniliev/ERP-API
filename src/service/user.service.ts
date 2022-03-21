@@ -14,14 +14,25 @@ export async function createUser(input: Prisma.UserCreateInput, leadId?: string)
   try {
     let query = { data: { ...input, password } }
     if (leadId) {
-      const lead = await prisma.lead.findFirst({ where: { userId: leadId } })
-      // * IF LEAD ID IS PROVIDED WHEN CREATING USER, WE NEED DIFFERENT QUERY TO CONNECT HIM TO THE RELATIVE MODEL
-      query = { data: { ...input, password, lead: { connect: { id: leadId } } } }
-      if (!lead) {
-        // * IF THE USER IS NOT A LEAD YET, WE MAKE HIM LEAD
-        const newLead = await prisma.lead.create({ data: { leaderInfo: { connect: { id: leadId } } } })
-        // * WE MODIFY THE QUERY WITH THE NEW LEAD RELATION
-        query = { data: { ...input, password, lead: { connect: { id: newLead.id } } } }
+      query = {
+        data: {
+          ...input,
+          password,
+          lead: {
+            connectOrCreate: {
+              where: {
+                id: leadId,
+              },
+              create: {
+                leadInfo: {
+                  connect: {
+                    id: leadId,
+                  },
+                },
+              },
+            },
+          },
+        },
       }
     }
 
@@ -55,7 +66,7 @@ export async function getUsers(): Promise<Omit<User, 'password' | 'leading'>[]> 
       leadId: true,
       lead: {
         select: {
-          leaderInfo: {
+          leadInfo: {
             select: {
               name: true,
               email: true,
@@ -72,29 +83,25 @@ export async function getUsers(): Promise<Omit<User, 'password' | 'leading'>[]> 
 }
 
 export async function findUser(query: { id: string }): Promise<User | null> {
-  try {
-    const user = prisma.user.findFirst({
-      where: query,
-      include: {
-        lead: {
-          select: {
-            leaderInfo: {
-              select: {
-                name: true,
-                email: true,
-                discord: true,
-              },
+  const user = prisma.user.findFirst({
+    where: query,
+    include: {
+      lead: {
+        select: {
+          leadInfo: {
+            select: {
+              name: true,
+              email: true,
+              discord: true,
             },
           },
         },
-        celebration: true,
-        timeOffs: true,
       },
-    })
-    return omit(user, 'password')
-  } catch (e) {
-    throw e
-  }
+      celebration: true,
+      timeOffs: true,
+    },
+  })
+  return omit(user, 'password')
 }
 
 export async function updateUser(input: Prisma.UserUpdateInput, id: string, leadId?: string): Promise<User> {
@@ -103,17 +110,19 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
     if (leadId) {
       // HERE LEADID IS ACTUALLY THE ID OF THE USER MODEL
       const lead = await prisma.lead.findFirst({ where: { userId: leadId } })
+
       // * IF LEAD ID IS PROVIDED WHEN CREATING USER, WE NEED DIFFERENT QUERY TO CONNECT HIM TO THE RELATIVE MODEL
-      query = { ...input, lead: { connect: { id: leadId } } }
+      query = { ...input, lead: { connect: { userId: leadId } } }
       if (!lead) {
         // * IF THE USER IS NOT A LEAD YET, WE MAKE HIM LEAD
-        const newLead = await prisma.lead.create({ data: { leaderInfo: { connect: { id: leadId } } } })
+        const newLead = await prisma.lead.create({ data: { leadInfo: { connect: { id: leadId } } } })
         // * WE MODIFY THE QUERY WITH THE NEW LEAD RELATION
-        query = { ...input, lead: { connect: { id: newLead.id } } }
+        query = { ...input, lead: { connect: { userId: newLead.userId } } }
       }
     }
 
     const user = await prisma.user.update({ where: { id }, data: query })
+
     return user
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -126,12 +135,8 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
 }
 
 export async function deleteUser(id: string) {
-  try {
-    const deletedUser = await prisma.user.delete({ where: { id } })
-    return deletedUser
-  } catch (e) {
-    throw e
-  }
+  const deletedUser = await prisma.user.delete({ where: { id } })
+  return deletedUser
 }
 
 export async function validatePassword({ email, password }: { email: string; password: string }) {

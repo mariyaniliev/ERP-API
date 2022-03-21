@@ -31,7 +31,7 @@ export async function getCelebrationHandler(req: Request<{ id: string }>, res: R
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }
 
@@ -69,6 +69,6 @@ export async function deleteCelebrationHandler(req: Request<{ id: string }>, res
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }

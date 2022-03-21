@@ -25,7 +25,7 @@ export async function getTimeOffHandler(req: Request<{ id: string }>, res: Respo
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }
 
@@ -63,6 +63,6 @@ export async function deleteTimeOffHandler(req: Request<{ id: string }>, res: Re
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }

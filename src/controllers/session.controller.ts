@@ -33,7 +33,7 @@ export async function getUserSessionHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }
 
@@ -46,6 +46,6 @@ export async function deleteSessionHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(404).send(typedError?.message)
   }
 }
