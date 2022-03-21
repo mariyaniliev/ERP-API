@@ -4,7 +4,7 @@
 </p></h1>
 
 <p align="center">
-  <a href="https://genericsoft.bg/" target="blank"><img src="https://ibb.co/NYTZ0HV" width="320" alt="generic-soft logo" /></a>
+  <a href="https://genericsoft.bg/" target="blank"><img src="https://i.postimg.cc/hj6JSw-tv/gs.png" width="320" alt="generic-soft logo" /></a>
 </p>
 
 ## Initial setup
