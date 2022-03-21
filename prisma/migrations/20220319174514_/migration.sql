@@ -33,7 +33,7 @@ CREATE TABLE "users" (
     "password" VARCHAR(80) NOT NULL,
     "enabled" BOOLEAN NOT NULL DEFAULT false,
     "authority" "authority_types" NOT NULL DEFAULT E'User',
-    "alcohol" "alcohol_types" NOT NULL,
+    "alcohol" "alcohol_types",
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
     "phone" VARCHAR(50),
@@ -83,7 +83,13 @@ CREATE TABLE "celebrations" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_leadId_key" ON "users"("leadId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "leads_userId_key" ON "leads"("userId");
+
+-- AddForeignKey
+ALTER TABLE "users" ADD CONSTRAINT "users_leadId_fkey" FOREIGN KEY ("leadId") REFERENCES "leads"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "leads" ADD CONSTRAINT "leads_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

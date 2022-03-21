@@ -2,7 +2,13 @@ import { Express, Request, Response } from 'express'
 /**
  * ! Controllers
  */
-import { createUserHandler, getUsersHandler } from './controllers/user.controller'
+import {
+  createUserHandler,
+  deleteUserHandler,
+  getUserHandler,
+  getUsersHandler,
+  updateUserHandler,
+} from './controllers/user.controller'
 import { createUserSessionHandler, deleteSessionHandler, getUserSessionHandler } from './controllers/session.controller'
 import {
   createLeadHandler,
@@ -51,23 +57,30 @@ export default function routes(app: Express) {
   // Login session
   app.post('/sessions', validateResource(createSessionSchema), createUserSessionHandler)
   app.get('/sessions', requireUser, getUserSessionHandler)
+  // Logout
   app.delete('/sessions', requireUser, deleteSessionHandler)
   /**
    * * RESOURCES
    */
   // Return all users
   app.get('/users', requireUser, getUsersHandler)
-  
+  // Returns user
+  app.get('/users/:id', requireUser, getUserHandler)
+  //Update user
+  app.patch('/users/:id', requireUser, updateUserHandler)
+  //Delete user
+  app.delete('/users/:id', requireUser, deleteUserHandler)
+
   // Add new lead
   app.post('/leads', requireUser, createLeadHandler)
   // Return all leads
   app.get('/leads', requireUser, getLeadsHandler)
   // Return lead
-  app.get('/leads/:leadId', requireUser, getLeadHandler)
+  app.get('/leads/:id', requireUser, getLeadHandler)
   // Update lead
-  app.patch('/leads/:leadId', requireUser, updateLeadHandler)
+  app.patch('/leads/:id', requireUser, updateLeadHandler)
   // Delete lead
-  app.delete('/leads/:leadId', requireUser, deleteLeadHandler)
+  app.delete('/leads/:id', requireUser, deleteLeadHandler)
 
   // Add new time off
   app.post('/timeoffs', requireUser, createTimeOffHandler)

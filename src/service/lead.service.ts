@@ -1,21 +1,52 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
-export async function createLead(leadId: string) {
-  const createdLead = await prisma.lead.create({
-    data: { user: { connect: { id: leadId } } },
-  })
-  return createdLead
+export async function createLead(userId: string) {
+  try {
+    const createdLead = await prisma.lead.create({
+      data: { leadInfo: { connect: { id: userId } } },
+    })
+    return createdLead
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      logger.error(e.code + ' : ' + e.message)
+    }
+    throw e
+  }
 }
 
 export async function findLead(id: string) {
-  const lead = await prisma.lead.findFirst({ where: { id }, include: { user: true } })
+  const lead = await prisma.lead.findFirst({
+    where: { id },
+    include: {
+      leadInfo: {
+        select: {
+          email: true,
+          name: true,
+          enabled: true,
+          authority: true,
+          phone: true,
+          discord: true,
+          createdAt: true,
+          updatedAt: true,
+          leadId: true,
+        },
+      },
+      team: true,
+    },
+  })
   return lead
 }
 
 export async function getLeads() {
-  const leads = await prisma.lead.findMany({ include: { user: true } })
+  const leads = await prisma.lead.findMany({
+    include: {
+      leadInfo: { select: { name: true, email: true, discord: true } },
+      team: { select: { name: true, email: true, discord: true } },
+    },
+  })
   return leads
 }
 

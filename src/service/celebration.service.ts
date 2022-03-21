@@ -1,12 +1,20 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
 export async function createCelebration(input: Prisma.CelebrationCreateInput, userId: string) {
-  const createdCelebration = await prisma.celebration.create({
-    data: { ...input, user: { connect: { id: userId } } },
-  })
-  return createdCelebration
+  try {
+    const createdCelebration = await prisma.celebration.create({
+      data: { ...input, user: { connect: { id: userId } } },
+    })
+    return createdCelebration
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      logger.error(e.code + ' : ' + e.message)
+    }
+    throw e
+  }
 }
 
 export async function findCelebration(id: string) {
@@ -15,7 +23,7 @@ export async function findCelebration(id: string) {
 }
 
 export async function getCelebrations() {
-  const celebrations = await prisma.celebration.findMany({ include: { user: true } })
+  const celebrations = await prisma.celebration.findMany({ include: { user: { select: { name: true } } } })
   return celebrations
 }
 

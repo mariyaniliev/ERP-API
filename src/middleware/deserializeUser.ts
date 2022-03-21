@@ -20,7 +20,6 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
 
   if (expired && refreshToken) {
     const newAccessToken = await reIssueAccessToken(refreshToken)
-
     if (newAccessToken) {
       res.setHeader('x-access-token', newAccessToken)
 
