@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -25,7 +26,7 @@ model User {
   password    String         @db.VarChar(80)
   enabled     Boolean        @default(false)
   authority   AuthorityTypes @default(User)
-  alcohol     alcoholTypes?
+  alcohol     AlcoholTypes?
   createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
   phone       String?        @db.VarChar(50)
@@ -38,6 +39,7 @@ model User {
   leading     Lead?          @relation("LeadingCategory")
   timeOffs    TimeOff[]
 
+  @@index([email])
   @@map("users")
 }
 
@@ -73,6 +75,7 @@ model Celebration {
   userId    String        @db.Uuid
   user      User          @relation(fields: [userId], references: [id])
 
+  @@index([startDate])
   @@map("celebrations")
 }
 
@@ -116,7 +119,7 @@ enum AuthorityTypes {
   @@map("authority_types")
 }
 
-enum alcoholTypes {
+enum AlcoholTypes {
   Whiskey
   Vodka
   Beer
@@ -125,7 +128,7 @@ enum alcoholTypes {
   Tequila
   Absinthe
   Gin
-  other
+  Other
 
   @@map("alcohol_types")
 }

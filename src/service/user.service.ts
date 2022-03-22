@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, User } from '@prisma/client'
+import { PrismaClient, Prisma, User, AuthorityTypes, TshirtSizes, AlcoholTypes } from '@prisma/client'
 import { omit } from 'lodash'
 import bcrypt from 'bcrypt'
 import logger from '../utils/logger'
@@ -52,10 +52,11 @@ export async function getUsers(query: {
   page: string
   limit: string
 }): Promise<{ data: Omit<User, 'password' | 'leading'>[]; resultsCount: number }> {
-  const page = Number(query.page) | 1
-  const limit = Number(query.limit) | 10
+  const page = Number(query.page) || 1
+  const limit = Number(query.limit) || 10
   const startIndex = (page - 1) * limit
   const resultsCount = await prisma.user.count()
+
   const users = await prisma.user.findMany({
     skip: startIndex,
     take: limit,
@@ -89,6 +90,61 @@ export async function getUsers(query: {
     },
   })
   return { data: users, resultsCount }
+}
+
+export async function searchUsers(query: {
+  email?: string
+  name?: string
+  phone?: string
+  discord?: string
+  page?: string
+  limit?: string
+  enabled?: string
+  leadId?: string
+  authority?: AuthorityTypes
+  tshirtSize?: TshirtSizes
+  alcohol?: AlcoholTypes
+}) {
+  const { email, name, phone, discord, leadId, tshirtSize, alcohol } = query
+  const limit = Number(query.limit) || 10
+  const enabled = query.enabled === 'true' ? true : query.enabled === 'false' ? false : undefined
+  const authority = query.authority
+
+  const searchedUsers = await prisma.user.findMany({
+    take: limit,
+    where: {
+      enabled: enabled,
+      lead: {
+        id: leadId,
+      },
+      email: {
+        contains: email?.trim(),
+        mode: 'insensitive',
+      },
+      name: {
+        contains: name?.trim(),
+        mode: 'insensitive',
+      },
+      phone: {
+        contains: phone?.trim(),
+        mode: 'insensitive',
+      },
+      discord: {
+        contains: discord?.trim(),
+        mode: 'insensitive',
+      },
+      authority: {
+        equals: authority,
+      },
+      tshirtSize: {
+        equals: tshirtSize,
+      },
+      alcohol: {
+        equals: alcohol,
+      },
+    },
+  })
+  return searchedUsers
 }
 
 export async function findUser(query: { id: string }): Promise<User | null> {

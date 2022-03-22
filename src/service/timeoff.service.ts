@@ -23,8 +23,8 @@ export async function findTimeOff(id: string) {
 }
 
 export async function getTimeOffs(query: { page: string; limit: string }) {
-  const page = Number(query.page) | 1
-  const limit = Number(query.limit) | 10
+  const page = Number(query.page) || 1
+  const limit = Number(query.limit) || 10
   const startIndex = (page - 1) * limit
   const resultsCount = await prisma.timeOff.count()
   const timeOffs = await prisma.timeOff.findMany({

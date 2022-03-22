@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { createTimeOff, deleteTimeOff, findTimeOff, getTimeOffs, updateTimeOff } from '../service/timeoff.service'
+import { errorMessage } from '../utils/prismaerror.utils'
 import logger from '../utils/logger'
 export async function createTimeOffHandler(
   req: Request<{ userId: string }, Record<string, unknown>, Prisma.TimeOffCreateInput>,
@@ -14,7 +15,7 @@ export async function createTimeOffHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 export async function getTimeOffHandler(req: Request<{ id: string }>, res: Response) {
@@ -25,7 +26,7 @@ export async function getTimeOffHandler(req: Request<{ id: string }>, res: Respo
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
 
@@ -59,7 +60,7 @@ export async function updateTimeOffHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -71,6 +72,6 @@ export async function deleteTimeOffHandler(req: Request<{ id: string }>, res: Re
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }

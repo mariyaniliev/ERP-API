@@ -56,7 +56,7 @@ export async function reIssueAccessToken(token: string): Promise<string | false>
   if (!session || !session.valid) return false
 
   const user = await findUser({ id: session.userId })
-  
+
   if (!user) return false
 
   const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: process.env.JWT_TOKEN_TTL })

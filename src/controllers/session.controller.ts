@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client'
 import { Request, Response } from 'express'
 import { createSession, findSession, updateSession } from '../service/session.service'
 import { validatePassword } from '../service/user.service'
+import { errorMessage } from '../utils/prismaerror.utils'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
 
@@ -21,7 +22,7 @@ export async function createUserSessionHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -33,7 +34,7 @@ export async function getUserSessionHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
 
@@ -46,6 +47,6 @@ export async function deleteSessionHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }

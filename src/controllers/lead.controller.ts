@@ -1,11 +1,17 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { createLead, deleteLead, findLead, getLeads, updateLead } from '../service/lead.service'
+import { errorMessage } from '../utils/prismaerror.utils'
 import logger from '../utils/logger'
 export async function createLeadHandler(req: Request<{ userId: string }, Record<string, unknown>>, res: Response) {
-  const lead = await createLead(req.params.userId)
-
-  return res.send(lead)
+  try {
+    const lead = await createLead(req.params.userId)
+    return res.send(lead)
+  } catch (error) {
+    const typedError = error as Prisma.PrismaClientKnownRequestError
+    logger.error(typedError)
+    return res.status(409).send(errorMessage(typedError))
+  }
 }
 export async function getLeadHandler(req: Request<{ id: string }>, res: Response) {
   try {
@@ -15,17 +21,19 @@ export async function getLeadHandler(req: Request<{ id: string }>, res: Response
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
 
-export async function getLeadsHandler(  req: Request<
-  Record<string, unknown>,
-  Record<string, unknown>,
-  Record<string, unknown>,
-  { page: string; limit: string }
->,
-res: Response) {
+export async function getLeadsHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { page: string; limit: string }
+  >,
+  res: Response
+) {
   const leads = await getLeads(req.query)
   return res.send(leads)
 }
@@ -47,7 +55,7 @@ export async function updateLeadHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -59,6 +67,6 @@ export async function deleteLeadHandler(req: Request<{ id: string }>, res: Respo
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
