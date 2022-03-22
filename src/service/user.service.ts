@@ -116,7 +116,40 @@ export async function searchUsers(query: {
   const enabled = query.enabled === 'true' ? true : query.enabled === 'false' ? false : undefined
   const authority = query.authority
   const startIndex = (page - 1) * limit
-  const resultsCount = await prisma.user.count()
+
+  const resultsCount = await prisma.user.count({
+    where: {
+      enabled: enabled,
+      lead: {
+        id: leadId,
+      },
+      email: {
+        contains: email?.trim(),
+        mode: 'insensitive',
+      },
+      name: {
+        contains: name?.trim(),
+        mode: 'insensitive',
+      },
+      phone: {
+        contains: phone?.trim(),
+        mode: 'insensitive',
+      },
+      discord: {
+        contains: discord?.trim(),
+        mode: 'insensitive',
+      },
+      authority: {
+        equals: authority,
+      },
+      tshirtSize: {
+        equals: tshirtSize,
+      },
+      alcohol: {
+        equals: alcohol,
+      },
+    },
+  })
   const searchedUsers = await prisma.user.findMany({
     take: limit,
     skip: startIndex,
