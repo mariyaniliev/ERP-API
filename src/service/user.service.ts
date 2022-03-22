@@ -5,6 +5,13 @@ import logger from '../utils/logger'
 
 const prisma = new PrismaClient()
 
+prisma.$use(async (params, next) => {
+  if (params.model == 'User' && params.action === 'findMany') {
+    console.log('I am middleware')
+  }
+  return next(params)
+})
+
 export async function createUser(input: Prisma.UserCreateInput, leadId?: string): Promise<User> {
   // * leadId is primary key from User model
   const saltRounds = Number(process.env.SALT_ROUNDS)
