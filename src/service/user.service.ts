@@ -178,16 +178,22 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
   try {
     let query = input
     if (leadId) {
-      // HERE LEADID IS ACTUALLY THE ID OF THE USER MODEL
-      const lead = await prisma.lead.findFirst({ where: { userId: leadId } })
-
-      // * IF LEAD ID IS PROVIDED WHEN CREATING USER, WE NEED DIFFERENT QUERY TO CONNECT HIM TO THE RELATIVE MODEL
-      query = { ...input, lead: { connect: { userId: leadId } } }
-      if (!lead) {
-        // * IF THE USER IS NOT A LEAD YET, WE MAKE HIM LEAD
-        const newLead = await prisma.lead.create({ data: { leadInfo: { connect: { id: leadId } } } })
-        // * WE MODIFY THE QUERY WITH THE NEW LEAD RELATION
-        query = { ...input, lead: { connect: { userId: newLead.userId } } }
+      query = {
+        ...input,
+        lead: {
+          connectOrCreate: {
+            where: {
+              id: leadId,
+            },
+            create: {
+              leadInfo: {
+                connect: {
+                  id: leadId,
+                },
+              },
+            },
+          },
+        },
       }
     }
 

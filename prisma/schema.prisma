@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -39,7 +38,6 @@ model User {
   leading     Lead?          @relation("LeadingCategory")
   timeOffs    TimeOff[]
 
-  @@index([email])
   @@map("users")
 }
 
