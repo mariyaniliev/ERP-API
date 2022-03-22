@@ -35,8 +35,16 @@ export async function getCelebrationHandler(req: Request<{ id: string }>, res: R
   }
 }
 
-export async function getCelebrationsHandler(req: Request, res: Response) {
-  const celebrations = await getCelebrations()
+export async function getCelebrationsHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { page: string; limit: string }
+  >,
+  res: Response
+) {
+  const celebrations = await getCelebrations(req.query)
   return res.send(celebrations)
 }
 

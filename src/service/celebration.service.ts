@@ -22,11 +22,24 @@ export async function findCelebration(id: string) {
   return celebration
 }
 
-export async function getCelebrations() {
+export async function getCelebrations(query: { page: string; limit: string }) {
+  const page = Number(query.page) || 1
+  const limit = Number(query.limit) || 10
+  const startIndex = (page - 1) * limit
+  const resultsCount = await prisma.celebration.count()
   const celebrations = await prisma.celebration.findMany({
-    include: { user: { select: { name: true, birthday: true } } },
+    skip: startIndex,
+    take: limit,
+    include: {
+      user: {
+        select: {
+          name: true,
+          birthday: true,
+        },
+      },
+    },
   })
-  return celebrations
+  return { data: celebrations, resultsCount }
 }
 
 export async function updateCelebration(id: string, input: Prisma.CelebrationUpdateInput) {

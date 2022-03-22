@@ -19,13 +19,15 @@ export async function getLeadHandler(req: Request<{ id: string }>, res: Response
   }
 }
 
-export async function getLeadsHandler(  req: Request<
-  Record<string, unknown>,
-  Record<string, unknown>,
-  Record<string, unknown>,
-  { page: string; limit: string }
->,
-res: Response) {
+export async function getLeadsHandler(
+  req: Request<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+    { page: string; limit: string }
+  >,
+  res: Response
+) {
   const leads = await getLeads(req.query)
   return res.send(leads)
 }

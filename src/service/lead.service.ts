@@ -41,8 +41,8 @@ export async function findLead(id: string) {
 }
 
 export async function getLeads(query: { page: string; limit: string }) {
-  const page = Number(query.page) | 1
-  const limit = Number(query.limit) | 10
+  const page = Number(query.page) || 1
+  const limit = Number(query.limit) || 10
   const startIndex = (page - 1) * limit
   const resultsCount = await prisma.lead.count()
   const leads = await prisma.lead.findMany({
