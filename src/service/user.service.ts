@@ -12,8 +12,6 @@ prisma.$use(async (params, next) => {
     const password = bcrypt.hashSync(params.args.data.password, salt)
     params.args.data.password = password
   }
-  console.log(params.args);
-  
   return next(params)
 })
 
