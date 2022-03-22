@@ -6,25 +6,25 @@ import logger from '../utils/logger'
 const prisma = new PrismaClient()
 
 prisma.$use(async (params, next) => {
-  if (params.model == 'User' && params.action === 'findMany') {
-    console.log('I am middleware')
+  if (params.action === 'create' && params.model === 'User') {
+    const saltRounds = Number(process.env.SALT_ROUNDS)
+    const salt = await bcrypt.genSalt(saltRounds)
+    const password = bcrypt.hashSync(params.args.data.password, salt)
+    params.args.data.password = password
   }
+  console.log(params.args);
+  
   return next(params)
 })
 
 export async function createUser(input: Prisma.UserCreateInput, leadId?: string): Promise<User> {
   // * leadId is primary key from User model
-  const saltRounds = Number(process.env.SALT_ROUNDS)
-  const salt = await bcrypt.genSalt(saltRounds)
-  const password = bcrypt.hashSync(input.password, salt)
-
   try {
-    let query = { data: { ...input, password } }
+    let query = { data: input }
     if (leadId) {
       query = {
         data: {
           ...input,
-          password,
           lead: {
             connectOrCreate: {
               where: {

@@ -34,7 +34,14 @@ export async function findLead(id: string) {
           leadId: true,
         },
       },
-      team: true,
+      team: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          discord: true,
+        },
+      },
     },
   })
   return lead
