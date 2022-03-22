@@ -8,6 +8,7 @@ import {
   updateCelebration,
 } from '../service/celebration.service'
 import logger from '../utils/logger'
+import { errorMessage } from '../utils/prismaerror.utils'
 export async function createCelebrationHandler(
   req: Request<{ userId: string }, Record<string, unknown>, Prisma.CelebrationCreateInput>,
   res: Response
@@ -20,7 +21,7 @@ export async function createCelebrationHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 export async function getCelebrationHandler(req: Request<{ id: string }>, res: Response) {
@@ -31,7 +32,7 @@ export async function getCelebrationHandler(req: Request<{ id: string }>, res: R
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
 
@@ -65,7 +66,7 @@ export async function updateCelebrationHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -77,6 +78,6 @@ export async function deleteCelebrationHandler(req: Request<{ id: string }>, res
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }

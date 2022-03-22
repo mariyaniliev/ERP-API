@@ -3,6 +3,7 @@ import { AlcoholTypes, AuthorityTypes, Prisma, TshirtSizes } from '@prisma/clien
 import { omit } from 'lodash'
 import { createUser, deleteUser, findUser, getUsers, searchUsers, updateUser } from '../service/user.service'
 import { createSession } from '../service/session.service'
+import { errorMessage } from '../utils/prismaerror.utils'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
 
@@ -28,7 +29,7 @@ export async function createUserHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -53,7 +54,7 @@ export async function getUserHandler(req: Request, res: Response) {
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
 
@@ -84,7 +85,7 @@ export async function searchUsersHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 
@@ -98,7 +99,7 @@ export async function updateUserHandler(
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(409).send(typedError?.message)
+    return res.status(409).send(errorMessage(typedError))
   }
 }
 export async function deleteUserHandler(req: Request<{ id: string }>, res: Response) {
@@ -109,6 +110,6 @@ export async function deleteUserHandler(req: Request<{ id: string }>, res: Respo
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
-    return res.status(404).send(typedError?.message)
+    return res.status(404).send(errorMessage(typedError))
   }
 }
