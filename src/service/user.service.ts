@@ -112,11 +112,14 @@ export async function searchUsers(query: {
 }) {
   const { email, name, phone, discord, leadId, tshirtSize, alcohol } = query
   const limit = Number(query.limit) || 10
+  const page = Number(query.page) || 1
   const enabled = query.enabled === 'true' ? true : query.enabled === 'false' ? false : undefined
   const authority = query.authority
-
+  const startIndex = (page - 1) * limit
+  const resultsCount = await prisma.user.count()
   const searchedUsers = await prisma.user.findMany({
     take: limit,
+    skip: startIndex,
     where: {
       enabled: enabled,
       lead: {
@@ -149,7 +152,7 @@ export async function searchUsers(query: {
       },
     },
   })
-  return searchedUsers
+  return { data: searchedUsers, resultsCount }
 }
 
 export async function findUser(query: { id: string }): Promise<User | null> {
