@@ -274,11 +274,6 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
 }
 
 export async function deleteUser(id: string) {
-  const isUserLead = await prisma.lead.findFirst({ where: { userId: id } })
-  if (isUserLead) {
-    await prisma.lead.delete({ where: { userId: id } })
-  }
-
   const deletedUser = await prisma.user.delete({ where: { id } })
   return deletedUser
 }
