@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client'
-
 import { usersSeed } from './user.seed'
 
-const prisma = new PrismaClient()
+import prisma from '../../src/utils/client'
 
 async function main() {
   await Promise.all([await usersSeed()])

@@ -10,6 +10,9 @@ export async function usersSeed() {
       email: faker.internet.email(),
       name: faker.name.firstName() + ' ' + faker.name.lastName(),
       password: faker.internet.password(),
+      birthday: faker.date.past(),
+      discord: faker.internet.userName(),
+      phone: faker.phone.phoneNumber(),
     })),
     skipDuplicates: true,
   })
