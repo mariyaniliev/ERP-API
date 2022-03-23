@@ -1,9 +1,9 @@
-import { PrismaClient, Session, Prisma } from '@prisma/client'
+import { Session, Prisma } from '@prisma/client'
 import logger from '../utils/logger'
 import { get } from 'lodash'
 import { verifyJwt, signJwt } from '../utils/jwt.utils'
 import { findUser } from './user.service'
-const prisma = new PrismaClient()
+import prisma from '../utils/client'
 
 export async function createSession(userId: string, userAgent: string): Promise<Session> {
   try {
@@ -45,6 +45,7 @@ export async function updateSession(query: { id: string }, input: Prisma.Session
 
 export async function reIssueAccessToken(token: string): Promise<string | false> {
   const { decoded } = verifyJwt(token)
+
   if (!decoded || !get(decoded, 'session')) {
     return false
   }

@@ -15,7 +15,9 @@ export async function createCelebrationHandler(
 ) {
   try {
     const { userId } = req.params
-    const celebration = await createCelebration(req.body, userId)
+    const query = { ...req.body, user: { connect: { id: userId } } }
+
+    const celebration = await createCelebration(query)
 
     return res.send(celebration)
   } catch (error) {

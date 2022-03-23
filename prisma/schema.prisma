@@ -46,7 +46,7 @@ model Lead {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   userId    String    @unique @db.Uuid
-  leadInfo  User      @relation("LeadingCategory", fields: [userId], references: [id])
+  leadInfo  User      @relation("LeadingCategory", fields: [userId], references: [id], onDelete: Cascade)
   team      User[]    @relation("LeadCategory")
 
   @@map("leads")
@@ -60,7 +60,7 @@ model TimeOff {
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
-  user      User         @relation(fields: [userId], references: [id])
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("timeoffs")
 }
@@ -71,7 +71,7 @@ model Celebration {
   startDate DateTime      @map("start_date") @db.Timestamptz(6)
   enabled   Boolean       @default(true)
   userId    String        @db.Uuid
-  user      User          @relation(fields: [userId], references: [id])
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([startDate])
   @@map("celebrations")
@@ -103,7 +103,7 @@ enum TimeOffTypes {
 enum OccasionTypes {
   birthday
   nameday
-  other
+  Other
 
   @@map("occasion_types")
 }

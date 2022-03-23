@@ -1,7 +1,6 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import logger from '../utils/logger'
-
-const prisma = new PrismaClient()
+import prisma from '../utils/client'
 
 export async function createTimeOff(input: Prisma.TimeOffCreateInput, userId: string) {
   try {

@@ -1,9 +1,8 @@
-import { PrismaClient, Prisma, User, AuthorityTypes, TshirtSizes, AlcoholTypes } from '@prisma/client'
+import { Prisma, User, AuthorityTypes, TshirtSizes, AlcoholTypes } from '@prisma/client'
 import { omit } from 'lodash'
 import bcrypt from 'bcrypt'
 import logger from '../utils/logger'
-
-const prisma = new PrismaClient()
+import prisma from '../utils/client'
 
 prisma.$use(async (params, next) => {
   if (params.action === 'create' && params.model === 'User') {
@@ -90,7 +89,7 @@ export async function getUsers(query: {
           },
         },
       },
-      celebration: true,
+      celebration: { select: { id: true, occasion: true, startDate: true, enabled: true } },
       timeOffs: true,
     },
   })
@@ -184,6 +183,34 @@ export async function searchUsers(query: {
         equals: alcohol,
       },
     },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      enabled: true,
+      authority: true,
+      phone: true,
+      discord: true,
+      birthday: true,
+      alcohol: true,
+      tshirtSize: true,
+      createdAt: true,
+      updatedAt: true,
+      leadId: true,
+      lead: {
+        select: {
+          leadInfo: {
+            select: {
+              name: true,
+              email: true,
+              discord: true,
+            },
+          },
+        },
+      },
+      celebration: { select: { occasion: true, startDate: true, enabled: true } },
+      timeOffs: true,
+    },
   })
   return { data: searchedUsers, resultsCount }
 }
@@ -247,6 +274,11 @@ export async function updateUser(input: Prisma.UserUpdateInput, id: string, lead
 }
 
 export async function deleteUser(id: string) {
+  const isUserLead = await prisma.lead.findFirst({ where: { userId: id } })
+  if (isUserLead) {
+    await prisma.lead.delete({ where: { userId: id } })
+  }
+
   const deletedUser = await prisma.user.delete({ where: { id } })
   return deletedUser
 }

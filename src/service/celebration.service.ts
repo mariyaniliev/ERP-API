@@ -1,13 +1,10 @@
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import logger from '../utils/logger'
+import prisma from '../utils/client'
 
-const prisma = new PrismaClient()
-
-export async function createCelebration(input: Prisma.CelebrationCreateInput, userId: string) {
+export async function createCelebration(query: Prisma.CelebrationCreateInput) {
   try {
-    const createdCelebration = await prisma.celebration.create({
-      data: { ...input, user: { connect: { id: userId } } },
-    })
+    const createdCelebration = await prisma.celebration.create({ data: query })
     return createdCelebration
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
