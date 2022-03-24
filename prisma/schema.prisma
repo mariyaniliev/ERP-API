@@ -11,7 +11,7 @@ model Session {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   valid     Boolean   @default(true)
   userId    String    @db.Uuid
-  userAgent String    @db.VarChar(50)
+  userAgent String    @db.VarChar(150)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
 
