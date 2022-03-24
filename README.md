@@ -23,7 +23,7 @@ yarn dev
 ## Create the Database Instance in Docker
 
 ```shell
-docker-compose -d --build
+docker-compose up --build -d 
 ```
 
 ## Initialize the Database with Prisma Migration scripts
@@ -32,7 +32,6 @@ This is needed first time only. We use [Prisma](https://www.prisma.io/) as Datab
 
 ```shell
 # Generate the prisma clients
-# This is needed if schema.prisma file is modified
 yarn prisma generate
 
 # Migrate your changes to database
@@ -40,4 +39,19 @@ yarn prisma migrate dev
 
 ```
 
-Happy coding !!!
+## Environment variables
+
+| Setting                   | Description                                | Default value                                                               |
+| ------------------------- | ------------------------------------------ | --------------------------------------------------------------------------- |
+| `API_PORT`                | The port on which the app is running       | 4000                                                                        |
+| `COMPOSE_PROJECT_NAME`    | Compose name of the application            | genericsoft                                                                 |
+| `POSTGRES_HOST`           | Hostname for the db connection             | db                                                                          |
+| `POSTGRES_USER`           | Username for the database connection       | postgres                                                                    |
+| `POSTGRES_PASSWORD`       | Password for the database connection       | \*\*\*\*\*\*                                                                |
+| `POSTGRES_PORT`           | The port on which db is running            | 5432                                                                        |
+| `POSTGRES_NAME`           | Name for our database connection           | postgres                                                                    |
+| `DATABASE_URL`            | Database connection string                 | postgresql://postgres:mysecretpassword@localhost:5432/postgres?schema=api   |
+| `SALT_ROUNDS`             | Number of salt rounds for bcrypt           | 10                                                                          |
+| `AUTHORIZATION`           | Token required for testing the service     | \*\*\*\*\*\*                                                                |
+| `X_REFRESH`               | Refresh token required for testing         | \*\*\*\*\*\*                                                                |
+
