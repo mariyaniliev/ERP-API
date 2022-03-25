@@ -3,7 +3,9 @@ import { usersSeed } from './user.seed'
 import prisma from '../../src/utils/client'
 
 async function main() {
-  await Promise.all([await usersSeed()])
+  if (process.env.NODE_ENV === 'development') {
+    await Promise.all([await usersSeed()])
+  }
 }
 
 main()
