@@ -5,7 +5,11 @@ import logger from '../utils/logger'
 import prisma from '../utils/client'
 
 prisma.$use(async (params, next) => {
-  if (params.action === 'create' && params.model === 'User') {
+  if (
+    (params.action === 'create' || params.action === 'update') &&
+    params.model === 'User' &&
+    params.args.data.password
+  ) {
     const saltRounds = Number(process.env.SALT_ROUNDS)
     const salt = await bcrypt.genSalt(saltRounds)
     const password = bcrypt.hashSync(params.args.data.password, salt)

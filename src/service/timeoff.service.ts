@@ -17,7 +17,10 @@ export async function createTimeOff(input: Prisma.TimeOffCreateInput, userId: st
 }
 
 export async function findTimeOff(id: string) {
-  const timeOff = await prisma.timeOff.findFirst({ where: { id }, include: { user: true } })
+  const timeOff = await prisma.timeOff.findFirst({
+    where: { id },
+    include: { user: { select: { name: true, email: true } } },
+  })
   return timeOff
 }
 
@@ -33,6 +36,7 @@ export async function getTimeOffs(query: { page: string; limit: string }) {
       user: {
         select: {
           name: true,
+          email: true,
         },
       },
     },

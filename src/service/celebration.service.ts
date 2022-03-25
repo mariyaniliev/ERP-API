@@ -15,7 +15,10 @@ export async function createCelebration(query: Prisma.CelebrationCreateInput) {
 }
 
 export async function findCelebration(id: string) {
-  const celebration = await prisma.celebration.findFirst({ where: { id }, include: { user: true } })
+  const celebration = await prisma.celebration.findFirst({
+    where: { id },
+    include: { user: { select: { name: true, email: true } } },
+  })
   return celebration
 }
 

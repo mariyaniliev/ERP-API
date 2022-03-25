@@ -17,6 +17,10 @@ export async function createUserHandler(
   res: Response
 ) {
   try {
+    if (res.locals.user.authority !== 'Admin') {
+      req.body.authority = undefined
+    }
+
     const user = await createUser(req.body, req.query.leadId)
 
     const session = await createSession(user.id, req.get('user-agent') || '')
@@ -43,6 +47,7 @@ export async function getUsersHandler(
   res: Response
 ) {
   const users = await getUsers(req.query)
+
   return res.send(users)
 }
 
@@ -93,9 +98,12 @@ export async function updateUserHandler(
   req: Request<{ id: string }, Record<string, unknown>, Prisma.UserUpdateInput, { leadId: string | undefined }>,
   res: Response
 ) {
+  if (res.locals.user.authority !== 'Admin') {
+    req.body.authority = undefined
+  }
   try {
-    const users = await updateUser(req.body, req.params.id, req.query.leadId)
-    return res.send(users)
+    const user = await updateUser(req.body, req.params.id, req.query.leadId)
+    return res.send(omit(user, 'password'))
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
     logger.error(typedError)
