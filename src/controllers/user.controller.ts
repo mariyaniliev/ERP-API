@@ -17,8 +17,10 @@ export async function createUserHandler(
   res: Response
 ) {
   try {
-    if (res.locals.user.authority !== 'Admin') {
-      req.body.authority = undefined
+    if (req.body.authority) {
+      if (res.locals.user.authority !== 'Admin') {
+        req.body.authority = undefined
+      }
     }
 
     const user = await createUser(req.body, req.query.leadId)
