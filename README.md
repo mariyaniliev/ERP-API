@@ -1,5 +1,4 @@
 <h1><p align="center">
-  Generic Soft <br/>
   REST API
 </p></h1>
 
