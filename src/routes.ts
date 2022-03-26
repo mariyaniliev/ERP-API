@@ -11,13 +11,7 @@ import {
   updateUserHandler,
 } from './controllers/user.controller'
 import { createUserSessionHandler, deleteSessionHandler, getUserSessionHandler } from './controllers/session.controller'
-import {
-  createLeadHandler,
-  deleteLeadHandler,
-  getLeadHandler,
-  getLeadsHandler,
-  updateLeadHandler,
-} from './controllers/lead.controller'
+import { createLeadHandler, deleteLeadHandler, getLeadHandler, getLeadsHandler } from './controllers/lead.controller'
 import {
   createTimeOffHandler,
   deleteTimeOffHandler,
@@ -95,8 +89,6 @@ export default function routes(app: Express) {
   app.get('/leads', requireUser, getLeadsHandler)
   // * Return lead
   app.get('/leads/:id', requireUser, getLeadHandler)
-  // * Update lead
-  app.patch('/leads/:id', isAdmin, requireUser, updateLeadHandler)
   // * Delete lead
   app.delete('/leads/:id', isAdmin, requireUser, deleteLeadHandler)
   /**

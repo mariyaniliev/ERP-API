@@ -18,7 +18,7 @@ export async function createUserHandler(
 ) {
   try {
     if (req.body.authority) {
-      if (res.locals.user.authority !== 'Admin') {
+      if (res.locals.user && res.locals.user.authority !== 'Admin') {
         req.body.authority = undefined
       }
     }

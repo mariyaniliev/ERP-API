@@ -5,20 +5,20 @@ CREATE TYPE "tshirt_sizes" AS ENUM ('XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XX
 CREATE TYPE "time_off_types" AS ENUM ('paid', 'unpaid', 'sick', 'motherhood', 'paternity');
 
 -- CreateEnum
-CREATE TYPE "occasion_types" AS ENUM ('birthday', 'nameday', 'other');
+CREATE TYPE "occasion_types" AS ENUM ('birthday', 'nameday', 'Other');
 
 -- CreateEnum
 CREATE TYPE "authority_types" AS ENUM ('Admin', 'User', 'Accounting', 'HR');
 
 -- CreateEnum
-CREATE TYPE "alcohol_types" AS ENUM ('Whiskey', 'Vodka', 'Beer', 'Wine', 'Rum', 'Tequila', 'Absinthe', 'Gin', 'other');
+CREATE TYPE "alcohol_types" AS ENUM ('Whiskey', 'Vodka', 'Beer', 'Wine', 'Rum', 'Tequila', 'Absinthe', 'Gin', 'Other');
 
 -- CreateTable
 CREATE TABLE "sessions" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "valid" BOOLEAN NOT NULL DEFAULT true,
     "userId" UUID NOT NULL,
-    "userAgent" VARCHAR(50) NOT NULL,
+    "userAgent" VARCHAR(150) NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
 
@@ -49,7 +49,6 @@ CREATE TABLE "users" (
 CREATE TABLE "leads" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ(6),
     "userId" UUID NOT NULL,
 
     CONSTRAINT "leads_pkey" PRIMARY KEY ("id")
@@ -61,6 +60,8 @@ CREATE TABLE "timeoffs" (
     "userId" UUID NOT NULL,
     "start_date" TIMESTAMPTZ(6) NOT NULL,
     "end_date" TIMESTAMPTZ(6) NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6),
     "approved" BOOLEAN NOT NULL DEFAULT false,
     "uploaded" BOOLEAN NOT NULL DEFAULT false,
     "type" "time_off_types" NOT NULL,
@@ -73,6 +74,8 @@ CREATE TABLE "celebrations" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "occasion" "occasion_types" NOT NULL,
     "start_date" TIMESTAMPTZ(6) NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6),
     "enabled" BOOLEAN NOT NULL DEFAULT true,
     "userId" UUID NOT NULL,
 
@@ -85,14 +88,17 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "leads_userId_key" ON "leads"("userId");
 
+-- CreateIndex
+CREATE INDEX "celebrations_start_date_idx" ON "celebrations"("start_date");
+
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_leadId_fkey" FOREIGN KEY ("leadId") REFERENCES "leads"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "leads" ADD CONSTRAINT "leads_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "leads" ADD CONSTRAINT "leads_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "timeoffs" ADD CONSTRAINT "timeoffs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "timeoffs" ADD CONSTRAINT "timeoffs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "celebrations" ADD CONSTRAINT "celebrations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "celebrations" ADD CONSTRAINT "celebrations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

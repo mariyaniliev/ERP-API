@@ -50,28 +50,7 @@ describe('lead', () => {
           .then((res) => {
             expect(res.body).toHaveProperty('userId', user.id)
           })
-        //* We try to update the lead with different userId
 
-        const newUser = await createUser({
-          email: faker.internet.email(),
-          name: faker.name.firstName() + ' ' + faker.name.lastName(),
-          password: faker.internet.password(),
-          birthday: faker.date.past(),
-          discord: faker.internet.userName(),
-          phone: faker.phone.phoneNumber(),
-        })
-
-        const newLeadQuery = { leadInfo: { connect: { id: newUser.id } } }
-
-        await supertest(app)
-          .patch(`/leads/${lead.id}`)
-          .send(newLeadQuery)
-          .set('Authorization', `Bearer ${token}`)
-          .set('x-refresh', `Bearer ${refreshToken}`)
-          .expect(200)
-          .then((res) => {
-            expect(res.body).toHaveProperty('userId', newUser.id)
-          })
         //* We try to delete the new lead
         await supertest(app)
           .delete(`/leads/${lead.id}`)
@@ -102,12 +81,6 @@ describe('lead', () => {
             const resBodyKeys = Object.keys(res.body)
             expect(resBodyKeys.length).toEqual(0)
           })
-        //* We delete the second user as well
-        await supertest(app)
-          .delete(`/users/${newUser.id}`)
-          .set('Authorization', `Bearer ${token}`)
-          .set('x-refresh', `Bearer ${refreshToken}`)
-          .expect(200)
       })
     })
   })

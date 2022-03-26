@@ -42,12 +42,11 @@ model User {
 }
 
 model Lead {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  userId    String    @unique @db.Uuid
-  leadInfo  User      @relation("LeadingCategory", fields: [userId], references: [id], onDelete: Cascade)
-  team      User[]    @relation("LeadCategory")
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  userId   String @unique @db.Uuid
+  leadInfo User   @relation("LeadingCategory", fields: [userId], references: [id], onDelete: Cascade)
+  team     User[] @relation("LeadCategory")
 
   @@map("leads")
 }
@@ -57,6 +56,8 @@ model TimeOff {
   userId    String       @db.Uuid
   startDate DateTime     @map("start_date") @db.Timestamptz(6)
   endDate   DateTime     @map("end_date") @db.Timestamptz(6)
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
   approved  Boolean      @default(false)
   uploaded  Boolean      @default(false)
   type      TimeOffTypes
@@ -69,6 +70,8 @@ model Celebration {
   id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   occasion  OccasionTypes
   startDate DateTime      @map("start_date") @db.Timestamptz(6)
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime?     @updatedAt @map("updated_at") @db.Timestamptz(6)
   enabled   Boolean       @default(true)
   userId    String        @db.Uuid
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)

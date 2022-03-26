@@ -9,5 +9,5 @@ const port = process.env.API_PORT || 3000
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(SwaggerDoc))
 app.listen(port, () => {
   logger.info(`App is running at http://localhost:${port}`)
-  logger.info(`Docs avaiable at http://localhost:${port}/docs`)
+  logger.info(`Swagger docs avaiable at http://localhost:${port}/docs`)
 })

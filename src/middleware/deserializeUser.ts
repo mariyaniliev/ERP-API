@@ -8,8 +8,8 @@ import logger from '../utils/logger'
 
 export const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
   const accessToken = get(req, 'headers.authorization', '').replace(/^Bearer\s/, '')
-
   const refreshToken = get(req, 'headers.x-refresh', '').replace(/^Bearer\s/, '')
+
   if (!accessToken) {
     return next()
   }
@@ -26,7 +26,7 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
       const newAccessToken = await reIssueAccessToken(refreshToken)
 
       if (!newAccessToken) {
-        return res.status(403)
+        return res.sendStatus(403)
       }
       res.setHeader('x-access-token', newAccessToken)
 

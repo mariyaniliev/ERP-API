@@ -62,11 +62,6 @@ export async function getLeads(query: { page: string; limit: string }) {
   return { data: leads, resultsCount }
 }
 
-export async function updateLead(id: string, input: Prisma.LeadUpdateInput) {
-  const updatedLead = await prisma.lead.update({ where: { id }, data: input })
-  return updatedLead
-}
-
 export async function deleteLead(id: string) {
   const deleted = await prisma.lead.delete({ where: { id } })
   return deleted
