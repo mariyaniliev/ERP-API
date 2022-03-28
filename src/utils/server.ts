@@ -11,6 +11,7 @@ const corsOptions = {
 import routes from '../routes'
 function createServer() {
   const app = express()
+
   app.use(cors(corsOptions))
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
