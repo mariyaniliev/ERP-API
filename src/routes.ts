@@ -20,14 +20,8 @@ import {
   updateTimeOffHandler,
 } from './controllers/timeoff.controller'
 /**
- * ! Schemas
- */
-import { createSessionSchema } from './schema/session.schema'
-import { createUserSchema } from './schema/user.schema'
-/**
  * ! Middlewares
  */
-import { validateResource } from './middleware/validateResource'
 import { isAdminOrOwner } from './middleware/isAdminOrOwner'
 import { requireUser } from './middleware/requireUser'
 import {
@@ -47,9 +41,9 @@ export default function routes(app: Express) {
 
   // ! AUTHENTICATION
   // * Register (accepts query "leadId")
-  app.post('/users', validateResource(createUserSchema), createUserHandler)
+  app.post('/users', createUserHandler)
   // * Login session
-  app.post('/sessions', validateResource(createSessionSchema), createUserSessionHandler)
+  app.post('/sessions', createUserSessionHandler)
   app.get('/sessions', requireUser, getUserSessionHandler)
   // * Logout
   app.delete('/sessions', requireUser, deleteSessionHandler)

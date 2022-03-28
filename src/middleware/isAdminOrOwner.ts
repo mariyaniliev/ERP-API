@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 
 export const isAdminOrOwner = async (req: Request, res: Response, next: NextFunction) => {
+  if (!res.locals.user) return res.sendStatus(403)
+
   const { id, authority } = res.locals.user
 
   if (process.env.NODE_ENV === 'test' || authority === 'Admin') {

@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import helmet from 'helmet'
+import bodyParser from 'body-parser'
 import { deserializeUser } from '../middleware/deserializeUser'
 dotenv.config()
 const corsOptions = {
@@ -10,8 +11,9 @@ const corsOptions = {
 import routes from '../routes'
 function createServer() {
   const app = express()
-  app.use(express.json())
   app.use(cors(corsOptions))
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
   app.use(helmet())
   /**
    * * Check if the user provides valid token

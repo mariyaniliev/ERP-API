@@ -382,6 +382,9 @@ export default {
           '404': {
             description: 'User is not found.',
           },
+          '409': {
+            description: 'User already exist.',
+          },
         },
       },
       patch: {
@@ -674,6 +677,12 @@ export default {
                 },
               },
             },
+          },
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+          '409': {
+            description: 'Lead already exist.',
           },
         },
       },
