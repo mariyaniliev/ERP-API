@@ -6,7 +6,7 @@ import SwaggerDoc from '../swagger'
  */
 import CelebrationsController from './celebration.route'
 import LeadsController from './lead.route'
-import TimeOffsController from './timeOff.route'
+import TimeOffsController from './timeoff.route'
 import UsersController from './user.route'
 import SessionsController from './session.route'
 /**
