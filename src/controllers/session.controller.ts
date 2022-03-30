@@ -9,8 +9,7 @@ import logger from '../utils/logger'
 export async function createUserSessionHandler(req: Request, res: Response) {
   try {
     const user = await validatePassword(req.body)
-  
-    
+
     if (!user) return res.status(401).send('Invalid email or password')
 
     const session = await createSession(user.id, req.get('user-agent') || '')

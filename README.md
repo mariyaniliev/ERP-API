@@ -22,7 +22,7 @@ yarn dev
 ## Create the Database Instance in Docker
 
 ```shell
-docker-compose up --build -d 
+docker-compose up --build -d
 ```
 
 ## Initialize the Database with Prisma Migration scripts
