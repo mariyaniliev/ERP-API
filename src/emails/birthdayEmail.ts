@@ -40,12 +40,14 @@ const isTodayBirthday = (userBirthday: Date) => {
 }
 
 const checkUsersForBirthdays = async () => {
-  const users = await prisma.user.findMany({ select: { birthday: true, email: true } })
+  const users = await prisma.user.findMany({
+    where: { NOT: [{ birthday: null }] },
+    select: { birthday: true, email: true },
+  })
+
   users.forEach((user) => {
-    if (user.birthday) {
-      if (isTodayBirthday(user.birthday)) {
-        sendBirthdayEmail(user.email)
-      }
+    if (user.birthday && isTodayBirthday(user.birthday)) {
+      sendBirthdayEmail(user.email)
     }
   })
 }
