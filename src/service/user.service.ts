@@ -98,6 +98,7 @@ export async function getUsers(query: {
       phone: true,
       discord: true,
       birthday: true,
+      startingDate: true,
       alcohol: true,
       tshirtSize: true,
       createdAt: true,
@@ -121,8 +122,15 @@ export async function getUsers(query: {
   return { data: users, resultsCount }
 }
 
-export async function searchUsers(query: { emailOrName?: string; page?: string; limit?: string; leadId?: string }) {
-  const { emailOrName, leadId } = query
+export async function searchUsers(query: {
+  emailOrName?: string
+  page?: string
+  limit?: string
+  leadId?: string
+  birthday?: string
+  startingDate?: string
+}) {
+  const { emailOrName, leadId, birthday, startingDate } = query
   const limit = Number(query.limit) || 10
   const page = Number(query.page) || 1
 
@@ -132,6 +140,12 @@ export async function searchUsers(query: { emailOrName?: string; page?: string; 
     where: {
       lead: {
         id: leadId,
+      },
+      birthday: {
+        contains: birthday?.trim(),
+      },
+      startingDate: {
+        contains: startingDate?.trim(),
       },
       OR: [
         {
@@ -155,6 +169,12 @@ export async function searchUsers(query: { emailOrName?: string; page?: string; 
     where: {
       lead: {
         id: leadId,
+      },
+      birthday: {
+        contains: birthday?.trim(),
+      },
+      startingDate: {
+        contains: startingDate?.trim(),
       },
       OR: [
         {
@@ -180,6 +200,7 @@ export async function searchUsers(query: { emailOrName?: string; page?: string; 
       phone: true,
       discord: true,
       birthday: true,
+      startingDate: true,
       alcohol: true,
       tshirtSize: true,
       createdAt: true,

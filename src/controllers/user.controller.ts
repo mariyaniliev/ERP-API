@@ -75,6 +75,8 @@ export async function searchUsersHandler(
       page?: string
       limit?: string
       leadId?: string
+      birthday?: string
+      startingDate?: string
     }
   >,
   res: Response

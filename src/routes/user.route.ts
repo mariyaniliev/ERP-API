@@ -16,16 +16,11 @@ const router = Router()
 router.post('/users', createUserHandler)
 /*
    ? Search queries avaiable:
-   * email, 
-   * name, 
-   * phone, 
-   * discord, page, 
+   * emailOrName, 
+   * page, 
    * limit, 
-   * enabled, 
    * leadId, 
-   * authority, 
-   * tshirtSize,
-   * alcohol
+   * birthday
    */
 
 router.get('/users/search', requireUser, searchUsersHandler)
