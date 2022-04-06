@@ -4,14 +4,13 @@ import {
   deleteSessionHandler,
   getUserSessionHandler,
 } from '../controllers/session.controller'
-import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 
 const router = Router()
 
 // * Login session
 router.post('/sessions', createUserSessionHandler)
-router.get('/sessions', isAdminOrOwner, getUserSessionHandler)
+router.get('/sessions', getUserSessionHandler)
 // * Logout
-router.delete('/sessions', isAdminOrOwner, deleteSessionHandler)
+router.delete('/sessions', deleteSessionHandler)
 
 export default router

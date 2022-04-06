@@ -28,7 +28,7 @@ const sendBirthdayEmail = (targetEmail: string) => {
   })
 }
 
-const isTodayBirthday = (userBirthday: Date) => {
+const isTodayBirthday = (userBirthday: string) => {
   const date1 = new Date(userBirthday)
   const date2 = new Date()
   const birthdayFormatDate1 = `${date1.getMonth() + 1}/${date1.getDate()}`
