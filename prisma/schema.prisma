@@ -19,24 +19,26 @@ model Session {
 }
 
 model User {
-  id          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email       String         @unique @db.VarChar(50)
-  name        String         @db.VarChar(50)
-  password    String         @db.VarChar(80)
-  enabled     Boolean        @default(false)
-  authority   AuthorityTypes @default(User)
-  alcohol     AlcoholTypes?
-  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
-  phone       String?        @db.VarChar(50)
-  discord     String?        @db.VarChar(50)
-  birthday    DateTime?      @map("day_of_birth") @db.Timestamptz(6)
-  tshirtSize  TshirtSizes?
-  leadId      String?        @db.Uuid
-  lead        Lead?          @relation("LeadCategory", fields: [leadId], references: [id])
-  celebration Celebration[]
-  leading     Lead?          @relation("LeadingCategory")
-  timeOffs    TimeOff[]
+  id                   String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String         @unique @db.VarChar(50)
+  name                 String         @db.VarChar(50)
+  password             String         @db.VarChar(80)
+  enabled              Boolean        @default(false)
+  timeOffRemainingDays Int            @default(22)
+  authority            AuthorityTypes @default(User)
+  timeOffs             TimeOff[]
+  alcohol              AlcoholTypes?
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  birthday             DateTime?      @map("day_of_birth") @db.Timestamptz(6)
+  phone                String?        @db.VarChar(50)
+  discord              String?        @db.VarChar(50)
+  leadId               String?        @db.Uuid
+  tshirtSize           TshirtSizes?
+  celebration          Celebration[]
+  leading              Lead?          @relation("LeadingCategory")
+  lead                 Lead?          @relation("LeadCategory", fields: [leadId], references: [id])
+
 
   @@map("users")
 }
@@ -44,9 +46,9 @@ model User {
 model Lead {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  userId   String @unique @db.Uuid
-  leadInfo User   @relation("LeadingCategory", fields: [userId], references: [id], onDelete: Cascade)
-  team     User[] @relation("LeadCategory")
+  userId    String   @unique @db.Uuid
+  leadInfo  User     @relation("LeadingCategory", fields: [userId], references: [id], onDelete: Cascade)
+  team      User[]   @relation("LeadCategory")
 
   @@map("leads")
 }

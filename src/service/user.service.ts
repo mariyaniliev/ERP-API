@@ -1,8 +1,9 @@
-import { Prisma, User, AuthorityTypes, TshirtSizes, AlcoholTypes } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { omit } from 'lodash'
 import bcrypt from 'bcrypt'
 import logger from '../utils/logger'
 import prisma from '../utils/client'
+import { calculateTimeOffDays } from '../utils/calculateTimeOffDays'
 
 prisma.$use(async (params, next) => {
   if (
@@ -15,6 +16,26 @@ prisma.$use(async (params, next) => {
     const password = bcrypt.hashSync(params.args.data.password, salt)
     params.args.data.password = password
   }
+
+  // * If we create new time off, we calculate how many days we should subtract from user's remaining time off days
+  if (params.action === 'create' && params.model === 'TimeOff') {
+    const startDate = params.args.data.startDate
+    const endDate = params.args.data.endDate
+    const timeOffDays = await calculateTimeOffDays(startDate, endDate)
+    const userId = params.args.data.user.connect.id
+    const user = await prisma.user.findFirst({ where: { id: userId } })
+    if (user) {
+      if (user.timeOffRemainingDays - timeOffDays <= 0) {
+        throw new Error('Remaining time off days are not enough!')
+      }
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { timeOffRemainingDays: user.timeOffRemainingDays - timeOffDays },
+      })
+      logger.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`)
+    }
+  }
+
   return next(params)
 })
 
@@ -94,98 +115,61 @@ export async function getUsers(query: {
         },
       },
       celebration: { select: { id: true, occasion: true, startDate: true, enabled: true } },
-      timeOffs: true,
+      timeOffRemainingDays: true,
     },
   })
   return { data: users, resultsCount }
 }
 
-export async function searchUsers(query: {
-  email?: string
-  name?: string
-  phone?: string
-  discord?: string
-  page?: string
-  limit?: string
-  enabled?: string
-  leadId?: string
-  authority?: AuthorityTypes
-  tshirtSize?: TshirtSizes
-  alcohol?: AlcoholTypes
-}) {
-  const { email, name, phone, discord, leadId, tshirtSize, alcohol } = query
+export async function searchUsers(query: { emailOrName?: string; page?: string; limit?: string; leadId?: string }) {
+  const { emailOrName, leadId } = query
   const limit = Number(query.limit) || 10
   const page = Number(query.page) || 1
-  const enabled = query.enabled === 'true' ? true : query.enabled === 'false' ? false : undefined
-  const authority = query.authority
+
   const startIndex = (page - 1) * limit
 
   const resultsCount = await prisma.user.count({
     where: {
-      enabled: enabled,
       lead: {
         id: leadId,
       },
-      email: {
-        contains: email?.trim(),
-        mode: 'insensitive',
-      },
-      name: {
-        contains: name?.trim(),
-        mode: 'insensitive',
-      },
-      phone: {
-        contains: phone?.trim(),
-        mode: 'insensitive',
-      },
-      discord: {
-        contains: discord?.trim(),
-        mode: 'insensitive',
-      },
-      authority: {
-        equals: authority,
-      },
-      tshirtSize: {
-        equals: tshirtSize,
-      },
-      alcohol: {
-        equals: alcohol,
-      },
+      OR: [
+        {
+          email: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+        {
+          name: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+      ],
     },
   })
   const searchedUsers = await prisma.user.findMany({
     take: limit,
     skip: startIndex,
     where: {
-      enabled: enabled,
       lead: {
         id: leadId,
       },
-      email: {
-        contains: email?.trim(),
-        mode: 'insensitive',
-      },
-      name: {
-        contains: name?.trim(),
-        mode: 'insensitive',
-      },
-      phone: {
-        contains: phone?.trim(),
-        mode: 'insensitive',
-      },
-      discord: {
-        contains: discord?.trim(),
-        mode: 'insensitive',
-      },
-      authority: {
-        equals: authority,
-      },
-      tshirtSize: {
-        equals: tshirtSize,
-      },
-      alcohol: {
-        equals: alcohol,
-      },
+      OR: [
+        {
+          email: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+        {
+          name: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+      ],
     },
     select: {
       id: true,
@@ -213,7 +197,7 @@ export async function searchUsers(query: {
         },
       },
       celebration: { select: { occasion: true, startDate: true, enabled: true } },
-      timeOffs: true,
+      timeOffRemainingDays: true,
     },
   })
   return { data: searchedUsers, resultsCount }
@@ -235,7 +219,6 @@ export async function findUser(query: { id: string }): Promise<User | null> {
         },
       },
       celebration: true,
-      timeOffs: true,
     },
   })
   return omit(user, 'password')

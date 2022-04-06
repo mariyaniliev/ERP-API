@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { AlcoholTypes, AuthorityTypes, Prisma, TshirtSizes } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { omit } from 'lodash'
 import { createUser, deleteUser, findUser, getUsers, searchUsers, updateUser } from '../service/user.service'
 import { createSession } from '../service/session.service'
@@ -71,17 +71,10 @@ export async function searchUsersHandler(
     Record<string, unknown>,
     Record<string, unknown>,
     {
-      email?: string
-      name?: string
-      phone?: string
-      discord?: string
+      emailOrName: string
       page?: string
       limit?: string
-      enabled?: string
       leadId?: string
-      authority?: AuthorityTypes
-      tshirtSize?: TshirtSizes
-      alcohol?: AlcoholTypes
     }
   >,
   res: Response
