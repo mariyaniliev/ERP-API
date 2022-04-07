@@ -4,11 +4,11 @@ import dotenv from 'dotenv'
 import helmet from 'helmet'
 import cors from 'cors'
 import { deserializeUser } from '../middleware/deserializeUser'
+import routes from '../routes'
 dotenv.config()
 const corsOptions = {
   origin: 'http://localhost:3000',
 }
-import routes from '../routes'
 function createServer() {
   const app = express()
 
