@@ -6,12 +6,18 @@
   "engines": {
     "node": "16.13.1"
   },
+  "standard": {
+    "ignore": [
+      "dist/**/*"
+    ]
+  },
   "scripts": {
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "postinstall": "tsc",
     "format": "prettier --write . && prettier --check .",
     "lint": "eslint --fix . && eslint .",
+    "teststandart": "standard",
     "test": "jest"
   },
   "dependencies": {

@@ -1,26 +1,26 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const body_parser_1 = __importDefault(require("body-parser"));
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const helmet_1 = __importDefault(require("helmet"));
-const cors_1 = __importDefault(require("cors"));
-const deserializeUser_1 = require("../middleware/deserializeUser");
-dotenv_1.default.config();
+'use strict'
+const __importDefault = (this && this.__importDefault) || function (mod) {
+  return (mod && mod.__esModule) ? mod : { default: mod }
+}
+Object.defineProperty(exports, '__esModule', { value: true })
+const body_parser_1 = __importDefault(require('body-parser'))
+const express_1 = __importDefault(require('express'))
+const dotenv_1 = __importDefault(require('dotenv'))
+const helmet_1 = __importDefault(require('helmet'))
+const cors_1 = __importDefault(require('cors'))
+const deserializeUser_1 = require('../middleware/deserializeUser')
+dotenv_1.default.config()
 const corsOptions = {
-    origin: 'http://localhost:3000',
-};
-const routes_1 = __importDefault(require("../routes"));
-function createServer() {
-    const app = (0, express_1.default)();
-    app.use((0, cors_1.default)(corsOptions));
-    app.use(body_parser_1.default.urlencoded({ extended: false }));
-    app.use(body_parser_1.default.json());
-    app.use((0, helmet_1.default)());
-    /**
+  origin: 'http://localhost:3000'
+}
+const routes_1 = __importDefault(require('../routes'))
+function createServer () {
+  const app = (0, express_1.default)()
+  app.use((0, cors_1.default)(corsOptions))
+  app.use(body_parser_1.default.urlencoded({ extended: false }))
+  app.use(body_parser_1.default.json())
+  app.use((0, helmet_1.default)())
+  /**
      * * Check if the user provides valid token
      * ? If not
      * ! routes are blocked
@@ -28,9 +28,9 @@ function createServer() {
      * ? If valid
      * * user is assigned to res.locals
      */
-    app.use(deserializeUser_1.deserializeUser);
-    (0, routes_1.default)(app);
-    return app;
+  app.use(deserializeUser_1.deserializeUser);
+  (0, routes_1.default)(app)
+  return app
 }
-exports.default = createServer;
-//# sourceMappingURL=server.js.map
+exports.default = createServer
+// # sourceMappingURL=server.js.map
