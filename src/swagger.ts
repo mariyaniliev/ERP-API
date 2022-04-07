@@ -62,9 +62,9 @@ export default {
             type: 'array',
             example: [],
           },
-          timeOffs: {
-            type: 'array',
-            example: [],
+          timeOffRemainingDays: {
+            type: 'number',
+            example: 22,
           },
         },
       },

@@ -7,13 +7,14 @@ import {
   searchUsersHandler,
   updateUserHandler,
 } from '../controllers/user.controller'
+import { isAdmin } from '../middleware/isAdmin'
 import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 import { requireUser } from '../middleware/requireUser'
 
 const router = Router()
 
 // * Register (accepts query "leadId")
-router.post('/users', createUserHandler)
+router.post('/users', isAdmin, createUserHandler)
 /*
    ? Search queries avaiable:
    * emailOrName, 
@@ -22,7 +23,6 @@ router.post('/users', createUserHandler)
    * leadId, 
    * birthday
    */
-
 router.get('/users/search', requireUser, searchUsersHandler)
 // * Return all users
 router.get('/users', requireUser, getUsersHandler)
