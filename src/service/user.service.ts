@@ -138,15 +138,6 @@ export async function searchUsers(query: {
 
   const resultsCount = await prisma.user.count({
     where: {
-      lead: {
-        id: leadId,
-      },
-      birthday: {
-        contains: birthday?.trim(),
-      },
-      startingDate: {
-        contains: startingDate?.trim(),
-      },
       OR: [
         {
           email: {
@@ -158,6 +149,15 @@ export async function searchUsers(query: {
           name: {
             contains: emailOrName?.trim(),
             mode: 'insensitive',
+          },
+          lead: {
+            id: leadId,
+          },
+          birthday: {
+            contains: birthday?.trim(),
+          },
+          startingDate: {
+            contains: startingDate?.trim(),
           },
         },
       ],
@@ -167,15 +167,6 @@ export async function searchUsers(query: {
     take: limit,
     skip: startIndex,
     where: {
-      lead: {
-        id: leadId,
-      },
-      birthday: {
-        contains: birthday?.trim(),
-      },
-      startingDate: {
-        contains: startingDate?.trim(),
-      },
       OR: [
         {
           email: {
@@ -187,6 +178,16 @@ export async function searchUsers(query: {
           name: {
             contains: emailOrName?.trim(),
             mode: 'insensitive',
+          },
+          lead: {
+            id: leadId,
+          },
+          birthday: {
+            contains: birthday?.trim(),
+          },
+
+          startingDate: {
+            contains: startingDate?.trim(),
           },
         },
       ],
@@ -242,6 +243,7 @@ export async function findUser(query: { id: string }): Promise<User | null> {
       celebration: true,
     },
   })
+
   return omit(user, 'password')
 }
 

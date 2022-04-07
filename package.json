@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "main": "app.ts",
   "license": "MIT",
+  "engines": {
+    "node": "16.13.1"
+  },
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
-    "build": "tsc",
+    "postinstall": "tsc",
     "format": "prettier --write . && prettier --check .",
     "lint": "eslint --fix . && eslint .",
     "test": "jest"

@@ -32,7 +32,7 @@ describe('lead', () => {
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
-          birthday: faker.date.past(),
+          birthday: '02/20/1999',
           discord: faker.internet.userName(),
           phone: faker.phone.phoneNumber(),
         })

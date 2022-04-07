@@ -33,7 +33,7 @@ describe('timeOff', () => {
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
-          birthday: faker.date.past(),
+          birthday: '02/20/1999',
           discord: faker.internet.userName(),
           phone: faker.phone.phoneNumber(),
         })
@@ -41,8 +41,8 @@ describe('timeOff', () => {
         //* It should create a new lead and connect the user that we created to it
 
         const query = {
-          startDate: faker.date.future(),
-          endDate: faker.date.future(),
+          startDate: '2022-04-07T00:28:55+03:00',
+          endDate: '2022-04-07T00:28:55+03:00',
           approved: true,
           uploaded: false,
           type: TimeOffTypes.paid,
@@ -66,7 +66,7 @@ describe('timeOff', () => {
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
-          birthday: faker.date.past(),
+          birthday: '02/20/1999',
           discord: faker.internet.userName(),
           phone: faker.phone.phoneNumber(),
         })

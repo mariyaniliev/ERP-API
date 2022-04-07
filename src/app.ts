@@ -5,10 +5,10 @@ import checkUsersForBirthdays from './emails/birthdayEmail'
 import cron from 'node-cron'
 
 const app = createServer()
-const port = process.env.API_PORT || 3000
+const port = Number(process.env.PORT) || 3000
 const baseUrl = process.env.BASE_URL || 'http://localhost'
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   logger.info(`App is running at ${baseUrl}:${port}`)
   logger.info(`Swagger docs avaiable at ${baseUrl}:${port}/docs`)
 })
