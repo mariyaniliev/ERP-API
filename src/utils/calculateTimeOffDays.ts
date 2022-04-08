@@ -13,22 +13,15 @@ export const calculateTimeOffDays = (startDate: Date, endDate: Date) => {
     while (curDate <= toDate) {
       const dayOfWeek = curDate.getDay()
 
-      let formattedDate = `${curDate.getMonth() + 1}/${curDate.getDate()}/${curDate.getFullYear()}`
+      const formattedDate = `${curDate.getMonth() + 1}/${curDate.getDate()}/${curDate.getFullYear()}`
+      console.log(curDate)
 
       if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        timeOffDays.add(formattedDate)
         count++
       }
-
-      timeOffDays.add(formattedDate)
       curDate.setDate(curDate.getDate() + 1)
-
-      formattedDate = `${curDate.getMonth() + 1}/${curDate.getDate()}/${curDate.getFullYear()}`
-
-      if (!timeOffDays.has(formattedDate)) {
-        timeOffDays.add(formattedDate)
-      }
     }
-    if (count > 0) count++
 
     const options = { country: 'bg', lang: 'en' }
     const allHolidays = await getHolidays(options)

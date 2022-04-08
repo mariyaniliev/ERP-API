@@ -12,12 +12,10 @@ export const isAdminOrOwner = async (req: Request, res: Response, next: NextFunc
   const candidateId = req.params.id
 
   if (req.params.userId) {
-    if (req.params.userId === id) {
+    if (req.params.userId === id || authority !== 'Admin') {
       return next()
     }
-    if (id !== req.params.userId || authority !== 'Admin') {
-      return res.sendStatus(403)
-    }
+    return res.sendStatus(403)
   }
 
   if (id !== candidateId) return res.sendStatus(403)
