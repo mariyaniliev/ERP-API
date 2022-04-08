@@ -250,6 +250,56 @@ export default {
           },
         },
       },
+      Session: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+          },
+          valid: {
+            type: 'boolean',
+            example: true,
+          },
+          userId: {
+            format: 'uuid',
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+          },
+          userAgent: {
+            type: 'string',
+            example: 'Google Chrome',
+          },
+          createdAt: {
+            type: 'string',
+            example: '2022-03-25T13:09:57.063Z',
+          },
+          updatedAt: {
+            type: 'string',
+            example: '2022-03-25T13:09:57.063Z',
+          },
+        },
+      },
+      SessionInput: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            required: true,
+            example: 'Steven.Segal@gmail.com',
+          },
+          password: {
+            type: 'string',
+            required: true,
+            example: 'yourpassword',
+          },
+          name: {
+            type: 'string',
+            required: true,
+            example: 'Steven Segal',
+          },
+        },
+      },
     },
   },
   info: {
@@ -596,6 +646,60 @@ export default {
           },
           '403': {
             description: 'Authentication token is not valid.',
+          },
+        },
+      },
+    },
+    '/sessions': {
+      get: {
+        tags: ['sessions'],
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+
+        description: 'Returns all sessions from the system that the user has access to',
+        responses: {
+          '200': {
+            description: 'A list of sessions.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  $ref: '#/components/schemas/Session',
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
+      post: {
+        tags: ['sessions'],
+        description: 'Creates new session',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SessionInput',
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Session created.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  $ref: '#/components/schemas/Session',
+                },
+              },
+            },
           },
         },
       },

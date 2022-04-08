@@ -12,6 +12,9 @@ export const isAdminOrOwner = async (req: Request, res: Response, next: NextFunc
   const candidateId = req.params.id
 
   if (req.params.userId) {
+    if (req.params.userId === id) {
+      return next()
+    }
     if (id !== req.params.userId || authority !== 'Admin') {
       return res.sendStatus(403)
     }
