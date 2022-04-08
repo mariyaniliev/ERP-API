@@ -22,6 +22,9 @@ prisma.$use(async (params, next) => {
     const startDate = params.args.data.startDate
     const endDate = params.args.data.endDate
     const timeOffDays = await calculateTimeOffDays(startDate, endDate)
+    if (timeOffDays === 0) {
+      throw new Error('You are trying to book 0 days.\nPlease check if requested dates are business days')
+    }
     const userId = params.args.data.user.connect.id
     const user = await prisma.user.findFirst({ where: { id: userId } })
     if (user) {
