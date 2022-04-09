@@ -293,11 +293,6 @@ export default {
             required: true,
             example: 'yourpassword',
           },
-          name: {
-            type: 'string',
-            required: true,
-            example: 'Steven Segal',
-          },
         },
       },
     },
@@ -358,6 +353,11 @@ export default {
       },
       post: {
         tags: ['users'],
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
         description: 'Creates new user',
         parameters: [
           {

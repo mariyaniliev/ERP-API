@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
 import { omit } from 'lodash'
-import { createUser, deleteUser, findUser, getUsers, searchUsers, updateUser } from '../service/user.service'
-import { createSession } from '../service/session.service'
+import { UserService } from '../service/user.service'
+import { SessionService } from '../service/session.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
@@ -23,9 +23,9 @@ export async function createUserHandler(
       }
     }
 
-    const user = await createUser(req.body, req.query.leadId)
+    const user = await UserService.createUser(req.body, req.query.leadId)
 
-    const session = await createSession(user.id, req.get('user-agent') || '')
+    const session = await SessionService.createSession(user.id, req.get('user-agent') || '')
 
     const accessToken = signJwt({ ...user, session: session.id }, { expiresIn: process.env.JWT_TOKEN_TTL })
 
@@ -48,14 +48,14 @@ export async function getUsersHandler(
   >,
   res: Response
 ) {
-  const users = await getUsers(req.query)
+  const users = await UserService.getUsers(req.query)
 
   return res.send(users)
 }
 
 export async function getUserHandler(req: Request, res: Response) {
   try {
-    const user = await findUser({ id: req.params.id })
+    const user = await UserService.findUser({ id: req.params.id })
 
     return res.send(user)
   } catch (error) {
@@ -82,7 +82,7 @@ export async function searchUsersHandler(
   res: Response
 ) {
   try {
-    const results = await searchUsers(req.query)
+    const results = await UserService.searchUsers(req.query)
     return res.send(results)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -99,7 +99,7 @@ export async function updateUserHandler(
     req.body.authority = undefined
   }
   try {
-    const user = await updateUser(req.body, req.params.id, req.query.leadId)
+    const user = await UserService.updateUser(req.body, req.params.id, req.query.leadId)
     return res.send(omit(user, 'password'))
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -110,7 +110,7 @@ export async function updateUserHandler(
 export async function deleteUserHandler(req: Request<{ id: string }>, res: Response) {
   try {
     const { id } = req.params
-    const deletedUser = await deleteUser(id)
+    const deletedUser = await UserService.deleteUser(id)
     return res.send(deletedUser)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError

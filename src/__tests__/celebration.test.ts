@@ -1,8 +1,8 @@
 import { OccasionTypes } from '@prisma/client'
 import faker from '@faker-js/faker'
 import supertest from 'supertest'
-import { createCelebration } from '../service/celebration.service'
-import { createUser } from '../service/user.service'
+import { CelebrationService } from '../service/celebration.service'
+import { UserService } from '../service/user.service'
 import createServer from '../utils/server'
 const app = createServer()
 const token = process.env.AUTHORIZATION
@@ -29,7 +29,7 @@ describe('celebration', () => {
 
     describe('successful crud operations', () => {
       it('should return 200', async () => {
-        const user = await createUser({
+        const user = await UserService.createUser({
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
@@ -45,7 +45,7 @@ describe('celebration', () => {
           enabled: true,
           user: { connect: { id: user.id } },
         }
-        const celebration = await createCelebration(query)
+        const celebration = await CelebrationService.createCelebration(query)
 
         //* The celebration that we just created should exist in our database
         await supertest(app)

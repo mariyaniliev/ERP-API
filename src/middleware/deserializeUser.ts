@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import { Request, Response, NextFunction } from 'express'
 import { Prisma } from '@prisma/client'
-import { reIssueAccessToken } from '../service/session.service'
+import { SessionService } from '../service/session.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import { verifyJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
@@ -23,7 +23,7 @@ export const deserializeUser = async (req: Request, res: Response, next: NextFun
 
   if (expired && refreshToken) {
     try {
-      const newAccessToken = await reIssueAccessToken(refreshToken)
+      const newAccessToken = await SessionService.reIssueAccessToken(refreshToken)
 
       if (!newAccessToken) {
         return res.sendStatus(403)

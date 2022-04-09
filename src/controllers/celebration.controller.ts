@@ -1,12 +1,6 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
-import {
-  createCelebration,
-  deleteCelebration,
-  findCelebration,
-  getCelebrations,
-  updateCelebration,
-} from '../service/celebration.service'
+import { CelebrationService } from '../service/celebration.service'
 import logger from '../utils/logger'
 import { errorMessage } from '../utils/prismaerror.utils'
 export async function createCelebrationHandler(
@@ -17,7 +11,7 @@ export async function createCelebrationHandler(
     const { userId } = req.params
     const query = { ...req.body, user: { connect: { id: userId } } }
 
-    const celebration = await createCelebration(query)
+    const celebration = await CelebrationService.createCelebration(query)
 
     return res.send(celebration)
   } catch (error) {
@@ -29,7 +23,7 @@ export async function createCelebrationHandler(
 export async function getCelebrationHandler(req: Request<{ id: string }>, res: Response) {
   try {
     const { id } = req.params
-    const celebration = await findCelebration(id)
+    const celebration = await CelebrationService.findCelebration(id)
     return res.send(celebration)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -47,7 +41,7 @@ export async function getCelebrationsHandler(
   >,
   res: Response
 ) {
-  const celebrations = await getCelebrations(req.query)
+  const celebrations = await CelebrationService.getCelebrations(req.query)
   return res.send(celebrations)
 }
 
@@ -59,11 +53,11 @@ export async function updateCelebrationHandler(
     const { id } = req.params
     const input = req.body
 
-    const celebration = await findCelebration(id)
+    const celebration = await CelebrationService.findCelebration(id)
     if (!celebration) {
       return res.sendStatus(404)
     }
-    const updatedCelebration = await updateCelebration(celebration.id, input)
+    const updatedCelebration = await CelebrationService.updateCelebration(celebration.id, input)
     return res.send(updatedCelebration)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -75,7 +69,7 @@ export async function updateCelebrationHandler(
 export async function deleteCelebrationHandler(req: Request<{ id: string }>, res: Response) {
   try {
     const { id } = req.params
-    const deletedCelebration = await deleteCelebration(id)
+    const deletedCelebration = await CelebrationService.deleteCelebration(id)
     return res.send(deletedCelebration)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError

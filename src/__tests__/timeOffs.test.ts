@@ -1,8 +1,8 @@
 import faker from '@faker-js/faker'
 import { TimeOffTypes } from '@prisma/client'
 import supertest from 'supertest'
-import { createTimeOff } from '../service/timeoff.service'
-import { createUser } from '../service/user.service'
+import { TimeOffService } from '../service/timeoff.service'
+import { UserService } from '../service/user.service'
 import createServer from '../utils/server'
 const app = createServer()
 const token = process.env.AUTHORIZATION
@@ -29,7 +29,7 @@ describe('timeOff', () => {
 
     describe('successful crud operations', () => {
       it('should return 200', async () => {
-        const user = await createUser({
+        const user = await UserService.createUser({
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
@@ -49,7 +49,7 @@ describe('timeOff', () => {
           user: { connect: { id: user.id } },
         }
 
-        const timeOff = await createTimeOff(query, user.id)
+        const timeOff = await TimeOffService.createTimeOff(query, user.id)
 
         //* The lead that we just created should exist in our database
         await supertest(app)
@@ -62,7 +62,7 @@ describe('timeOff', () => {
           })
         //* We try to update the lead with different userId
 
-        const newUser = await createUser({
+        const newUser = await UserService.createUser({
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),

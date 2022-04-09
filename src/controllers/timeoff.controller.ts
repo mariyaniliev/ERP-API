@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Prisma } from '@prisma/client'
-import { createTimeOff, deleteTimeOff, findTimeOff, getTimeOffs, updateTimeOff } from '../service/timeoff.service'
+import { TimeOffService } from '../service/timeoff.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import logger from '../utils/logger'
 export async function createTimeOffHandler(
@@ -9,7 +9,7 @@ export async function createTimeOffHandler(
 ) {
   try {
     const { userId } = req.params
-    const timeOff = await createTimeOff(req.body, userId)
+    const timeOff = await TimeOffService.createTimeOff(req.body, userId)
 
     return res.send(timeOff)
   } catch (error) {
@@ -21,7 +21,7 @@ export async function createTimeOffHandler(
 export async function getTimeOffHandler(req: Request<{ id: string }>, res: Response) {
   try {
     const { id } = req.params
-    const timeOff = await findTimeOff(id)
+    const timeOff = await TimeOffService.findTimeOff(id)
     return res.send(timeOff)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -39,7 +39,7 @@ export async function getTimeOffsHandler(
   >,
   res: Response
 ) {
-  const timeOffs = await getTimeOffs(req.query)
+  const timeOffs = await TimeOffService.getTimeOffs(req.query)
   return res.send(timeOffs)
 }
 
@@ -51,11 +51,11 @@ export async function updateTimeOffHandler(
     const { id } = req.params
     const input = req.body
 
-    const timeOff = await findTimeOff(id)
+    const timeOff = await TimeOffService.findTimeOff(id)
     if (!timeOff) {
       return res.sendStatus(404)
     }
-    const updatedTimeOff = await updateTimeOff(timeOff.id, input)
+    const updatedTimeOff = await TimeOffService.updateTimeOff(timeOff.id, input)
     return res.send(updatedTimeOff)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError
@@ -67,7 +67,7 @@ export async function updateTimeOffHandler(
 export async function deleteTimeOffHandler(req: Request<{ id: string }>, res: Response) {
   try {
     const { id } = req.params
-    const deletedTimeOff = await deleteTimeOff(id)
+    const deletedTimeOff = await TimeOffService.deleteTimeOff(id)
     return res.send(deletedTimeOff)
   } catch (error) {
     const typedError = error as Prisma.PrismaClientKnownRequestError

@@ -1,5 +1,5 @@
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.default = {
   openapi: '3.0.0',
   components: {
@@ -7,8 +7,8 @@ exports.default = {
       Authorization: {
         type: 'http',
         scheme: 'bearer',
-        bearerFormat: 'JWT'
-      }
+        bearerFormat: 'JWT',
+      },
     },
     schemas: {
       User: {
@@ -17,58 +17,58 @@ exports.default = {
           id: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           name: {
             type: 'string',
-            example: 'Steven Segal'
+            example: 'Steven Segal',
           },
           email: {
             type: 'string',
-            example: 'example@gmail.com'
+            example: 'example@gmail.com',
           },
           enabled: {
             type: 'boolean',
-            example: true
+            example: true,
           },
           authority: {
             type: 'string',
-            example: 'User'
+            example: 'User',
           },
           alcohol: {
             type: 'string',
-            example: 'Vodka'
+            example: 'Vodka',
           },
           tshirtSize: {
             type: 'string',
-            example: 'XL'
+            example: 'XL',
           },
           createdAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
+            example: '2022-03-25T13:09:57.063Z',
           },
           updatedAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
+            example: '2022-03-25T13:09:57.063Z',
           },
           leadId: {
             type: 'string',
             format: 'uuid',
-            example: null
+            example: null,
           },
           lead: {
             type: 'object',
-            $ref: '#/components/schemas/Lead'
+            $ref: '#/components/schemas/Lead',
           },
           celebration: {
             type: 'array',
-            example: []
+            example: [],
           },
-          timeOffs: {
-            type: 'array',
-            example: []
-          }
-        }
+          timeOffRemainingDays: {
+            type: 'number',
+            example: 22,
+          },
+        },
       },
       UserInput: {
         type: 'object',
@@ -76,19 +76,19 @@ exports.default = {
           name: {
             type: 'string',
             required: true,
-            example: 'Steven Segal'
+            example: 'Steven Segal',
           },
           email: {
             type: 'string',
             required: true,
-            example: 'example@gmail.com'
+            example: 'example@gmail.com',
           },
           password: {
             type: 'string',
             required: true,
-            example: 'yourpassword'
-          }
-        }
+            example: 'yourpassword',
+          },
+        },
       },
       Celebration: {
         type: 'object',
@@ -96,42 +96,42 @@ exports.default = {
           id: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           occasion: {
             type: 'string',
-            example: 'birthday'
+            example: 'birthday',
           },
           startDate: {
             type: 'string',
-            example: '2022-03-25T22:24:35+02:00'
+            example: '2022-03-25T22:24:35+02:00',
           },
           enabled: {
             type: 'boolean',
-            example: true
+            example: true,
           },
           authority: {
             type: 'string',
-            example: 'User'
+            example: 'User',
           },
           userId: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           user: {
             type: 'object',
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/User',
           },
           createdAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
+            example: '2022-03-25T13:09:57.063Z',
           },
           updatedAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
-          }
-        }
+            example: '2022-03-25T13:09:57.063Z',
+          },
+        },
       },
       CelebrationInput: {
         type: 'object',
@@ -139,19 +139,19 @@ exports.default = {
           occasion: {
             type: 'string',
             required: true,
-            example: 'birthday'
+            example: 'birthday',
           },
           startDate: {
             type: 'string',
             required: true,
-            example: '2022-03-25T22:52:27+02:00'
+            example: '2022-03-25T22:52:27+02:00',
           },
           enabled: {
             type: 'boolean',
             required: true,
-            example: true
-          }
-        }
+            example: true,
+          },
+        },
       },
       Lead: {
         type: 'object',
@@ -159,26 +159,26 @@ exports.default = {
           id: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           createdAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
+            example: '2022-03-25T13:09:57.063Z',
           },
           userId: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           leadInfo: {
             type: 'object',
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/User',
           },
           team: {
             type: 'array',
-            example: []
-          }
-        }
+            example: [],
+          },
+        },
       },
       TimeOff: {
         type: 'object',
@@ -186,41 +186,41 @@ exports.default = {
           id: {
             type: 'string',
             format: 'uuid',
-            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
           },
           endDate: {
             type: 'string',
-            example: '2022-03-25T22:24:35+02:00'
+            example: '2022-03-25T22:24:35+02:00',
           },
           startDate: {
             type: 'string',
-            example: '2022-03-25T22:24:35+02:00'
+            example: '2022-03-25T22:24:35+02:00',
           },
           approved: {
             type: 'boolean',
-            example: true
+            example: true,
           },
           uploaded: {
             type: 'boolean',
-            example: true
+            example: true,
           },
           type: {
             type: 'string',
-            example: 'paid'
+            example: 'paid',
           },
           user: {
             type: 'object',
-            $ref: '#/components/schemas/User'
+            $ref: '#/components/schemas/User',
           },
           createdAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
+            example: '2022-03-25T13:09:57.063Z',
           },
           updatedAt: {
             type: 'string',
-            example: '2022-03-25T13:09:57.063Z'
-          }
-        }
+            example: '2022-03-25T13:09:57.063Z',
+          },
+        },
       },
       TimeOffInput: {
         type: 'object',
@@ -228,40 +228,85 @@ exports.default = {
           startDate: {
             type: 'string',
             required: true,
-            example: '2022-03-25T22:24:35+02:00'
+            example: '2022-03-25T22:24:35+02:00',
           },
           endDate: {
             type: 'string',
             required: true,
-            example: '2022-03-25T22:24:35+02:00'
+            example: '2022-03-25T22:24:35+02:00',
           },
           approved: {
             type: 'boolean',
             required: true,
-            example: true
+            example: true,
           },
           uploaded: {
             type: 'boolean',
             required: true,
-            example: true
+            example: true,
           },
           type: {
             type: 'string',
             required: true,
-            example: 'paid'
-          }
-        }
-      }
-    }
+            example: 'paid',
+          },
+        },
+      },
+      Session: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            format: 'uuid',
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+          },
+          valid: {
+            type: 'boolean',
+            example: true,
+          },
+          userId: {
+            format: 'uuid',
+            example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+          },
+          userAgent: {
+            type: 'string',
+            example: 'Google Chrome',
+          },
+          createdAt: {
+            type: 'string',
+            example: '2022-03-25T13:09:57.063Z',
+          },
+          updatedAt: {
+            type: 'string',
+            example: '2022-03-25T13:09:57.063Z',
+          },
+        },
+      },
+      SessionInput: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            required: true,
+            example: 'Steven.Segal@gmail.com',
+          },
+          password: {
+            type: 'string',
+            required: true,
+            example: 'yourpassword',
+          },
+        },
+      },
+    },
   },
   info: {
     version: '1.0.0',
     title: 'GenericSoft API',
     description: 'ERP Rest API',
     contact: {
-      email: 'ivankraev122@gmail.com'
+      email: 'ivankraev122@gmail.com',
     },
-    servers: [`http://localhost:${4000}`]
+    servers: [`http://localhost:${4000}`],
   },
   paths: {
     '/users': {
@@ -269,8 +314,8 @@ exports.default = {
         tags: ['users'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -278,38 +323,43 @@ exports.default = {
             name: 'page',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'limit',
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Returns all users from the system that the user has access to',
         responses: {
-          200: {
+          '200': {
             description: 'A list of users.',
             content: {
               'application/json': {
                 schema: {
                   type: 'array',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
-          }
-        }
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
       },
       post: {
         tags: ['users'],
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
         description: 'Creates new user',
         parameters: [
           {
@@ -318,41 +368,41 @@ exports.default = {
             schema: {
               type: 'string',
               format: 'uuid',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/UserInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/UserInput',
+              },
+            },
+          },
         },
         responses: {
-          200: {
+          '200': {
             description: 'User created.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
-          }
-        }
-      }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     '/users/{id}': {
       get: {
         tags: ['users'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -361,41 +411,41 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         description: 'Returns a single users from the system',
         responses: {
-          200: {
+          '200': {
             description: 'User object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'User is not found.'
+          '404': {
+            description: 'User is not found.',
           },
-          409: {
-            description: 'User already exist.'
-          }
-        }
+          '409': {
+            description: 'User already exist.',
+          },
+        },
       },
       patch: {
         tags: ['users'],
         description: 'Update user',
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         required: ['id'],
         parameters: [
@@ -404,8 +454,8 @@ exports.default = {
             name: 'leadId',
             schema: {
               type: 'string',
-              format: 'uuid'
-            }
+              format: 'uuid',
+            },
           },
           {
             in: 'path',
@@ -413,45 +463,45 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/UserInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/UserInput',
+              },
+            },
+          },
         },
         responses: {
-          200: {
+          '200': {
             description: 'User updated.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Not authenticated for this action.'
+          '403': {
+            description: 'Not authenticated for this action.',
           },
-          404: {
-            description: 'User is not found.'
-          }
-        }
+          '404': {
+            description: 'User is not found.',
+          },
+        },
       },
       delete: {
         tags: ['users'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -460,39 +510,39 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Deletes a single users from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Deleted user object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'User is not found.'
-          }
-        }
-      }
+          '404': {
+            description: 'User is not found.',
+          },
+        },
+      },
     },
     '/users/search': {
       get: {
         tags: ['users'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -500,115 +550,168 @@ exports.default = {
             name: 'email',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'name',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'phone',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'discord',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'page',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'limit',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'enabled',
             schema: {
-              type: 'boolean'
-            }
+              type: 'boolean',
+            },
           },
           {
             in: 'query',
             name: 'leadId',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'authority',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'tShirtSize',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'alcohol',
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Returns a list of searched users from the system',
         responses: {
-          200: {
+          '200': {
             description: 'List with searched users.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/User'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
-          }
-        }
-      }
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
+    },
+    '/sessions': {
+      get: {
+        tags: ['sessions'],
+        security: [
+          {
+            Authorization: [],
+          },
+        ],
+        description: 'Returns all sessions from the system that the user has access to',
+        responses: {
+          '200': {
+            description: 'A list of sessions.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  $ref: '#/components/schemas/Session',
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
+      post: {
+        tags: ['sessions'],
+        description: 'Creates new session',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SessionInput',
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Session created.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  $ref: '#/components/schemas/Session',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     '/leads': {
       get: {
         tags: ['leads'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -616,44 +719,44 @@ exports.default = {
             name: 'page',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'limit',
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Returns all leads from the system that the user has access to',
         responses: {
-          200: {
+          '200': {
             description: 'A list of leads.',
             content: {
               'application/json': {
                 schema: {
                   type: 'array',
-                  $ref: '#/components/schemas/Lead'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Lead',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
-          }
-        }
-      }
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
     },
     '/leads/{userId}': {
       post: {
         tags: ['leads'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         description: 'Creates new lead',
         parameters: [
@@ -663,38 +766,38 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         responses: {
-          200: {
+          '200': {
             description: 'Lead created.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Lead'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Lead',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          409: {
-            description: 'Lead already exist.'
-          }
-        }
-      }
+          '409': {
+            description: 'Lead already exist.',
+          },
+        },
+      },
     },
     '/leads/{id}': {
       get: {
         tags: ['leads'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -703,37 +806,37 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         description: 'Returns a single lead from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Lead object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Lead'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Lead',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'Lead is not found.'
-          }
-        }
+          '404': {
+            description: 'Lead is not found.',
+          },
+        },
       },
       delete: {
         tags: ['leads'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -742,39 +845,39 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Deletes a single lead from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Deleted lead object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Lead'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Lead',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'Lead is not found.'
-          }
-        }
-      }
+          '404': {
+            description: 'Lead is not found.',
+          },
+        },
+      },
     },
     '/celebrations': {
       get: {
         tags: ['celebrations'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -782,44 +885,44 @@ exports.default = {
             name: 'page',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'limit',
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Returns all celebrations from the system that the user has access to',
         responses: {
-          200: {
+          '200': {
             description: 'A list of celebrations.',
             content: {
               'application/json': {
                 schema: {
                   type: 'array',
-                  $ref: '#/components/schemas/Celebration'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Celebration',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
-          }
-        }
-      }
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
     },
     '/celebrations/{id}': {
       get: {
         tags: ['celebrations'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -828,38 +931,38 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         description: 'Returns a single celebration from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Celebration object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Celebration'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Celebration',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'Celebration is not found.'
-          }
-        }
+          '404': {
+            description: 'Celebration is not found.',
+          },
+        },
       },
       patch: {
         tags: ['celebrations'],
         description: 'Update celebration',
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -868,45 +971,45 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/CelebrationInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/CelebrationInput',
+              },
+            },
+          },
         },
         responses: {
-          200: {
+          '200': {
             description: 'Celebration updated.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Celebration'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Celebration',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Not authenticated for this action.'
+          '403': {
+            description: 'Not authenticated for this action.',
           },
-          404: {
-            description: 'Celebration is not found.'
-          }
-        }
+          '404': {
+            description: 'Celebration is not found.',
+          },
+        },
       },
       delete: {
         tags: ['celebrations'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -915,39 +1018,39 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Deletes a single celebration from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Deleted celebration object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Celebration'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Celebration',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'Celebration is not found.'
-          }
-        }
-      }
+          '404': {
+            description: 'Celebration is not found.',
+          },
+        },
+      },
     },
     '/celebrations/{userId}': {
       post: {
         tags: ['celebrations'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -956,48 +1059,48 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/CelebrationInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/CelebrationInput',
+              },
+            },
+          },
         },
         description: 'Creates a celebration and connects it with user id.',
         responses: {
-          200: {
+          '200': {
             description: 'Celebration created.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/Celebration'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/Celebration',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          409: {
-            description: 'Conflict.'
-          }
-        }
-      }
+          '409': {
+            description: 'Conflict.',
+          },
+        },
+      },
     },
     '/timeoffs': {
       get: {
         tags: ['timeoffs'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -1005,44 +1108,44 @@ exports.default = {
             name: 'page',
             schema: {
               type: 'string',
-              minimum: 0
-            }
+              minimum: 0,
+            },
           },
           {
             in: 'query',
             name: 'limit',
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Returns all timeoffs from the system that the user has access to',
         responses: {
-          200: {
+          '200': {
             description: 'A list of timeoffs.',
             content: {
               'application/json': {
                 schema: {
                   type: 'array',
-                  $ref: '#/components/schemas/TimeOff'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/TimeOff',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
-          }
-        }
-      }
+          '403': {
+            description: 'Authentication token is not valid.',
+          },
+        },
+      },
     },
     '/timeoffs/{userId}': {
       post: {
         tags: ['timeoffs'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -1051,48 +1154,48 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/TimeOffInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/TimeOffInput',
+              },
+            },
+          },
         },
         description: 'Creates a timeoff and connects it with user id.',
         responses: {
-          200: {
+          '200': {
             description: 'Time off created.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/TimeOff'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/TimeOff',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          409: {
-            description: 'Conflict.'
-          }
-        }
-      }
+          '409': {
+            description: 'Conflict.',
+          },
+        },
+      },
     },
     '/timeoffs/{id}': {
       get: {
         tags: ['timeoffs'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -1101,38 +1204,38 @@ exports.default = {
             schema: {
               type: 'string',
               required: true,
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         description: 'Returns a single timeoff from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Time off object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/TimeOff'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/TimeOff',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'Time off is not found.'
-          }
-        }
+          '404': {
+            description: 'Time off is not found.',
+          },
+        },
       },
       patch: {
         tags: ['timeoffs'],
         description: 'Update time off',
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -1141,45 +1244,45 @@ exports.default = {
             schema: {
               required: true,
               type: 'string',
-              format: 'uuid'
-            }
-          }
+              format: 'uuid',
+            },
+          },
         ],
         requestBody: {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/TimeOffInput'
-              }
-            }
-          }
+                $ref: '#/components/schemas/TimeOffInput',
+              },
+            },
+          },
         },
         responses: {
-          200: {
+          '200': {
             description: 'Time off updated.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/TimeOff'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/TimeOff',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Not authenticated for this action.'
+          '403': {
+            description: 'Not authenticated for this action.',
           },
-          404: {
-            description: 'Time off is not found.'
-          }
-        }
+          '404': {
+            description: 'Time off is not found.',
+          },
+        },
       },
       delete: {
         tags: ['timeoffs'],
         security: [
           {
-            Authorization: []
-          }
+            Authorization: [],
+          },
         ],
         parameters: [
           {
@@ -1188,32 +1291,32 @@ exports.default = {
             required: true,
             schema: {
               type: 'string',
-              minimum: 0
-            }
-          }
+              minimum: 0,
+            },
+          },
         ],
         description: 'Deletes a single time off from the system',
         responses: {
-          200: {
+          '200': {
             description: 'Deleted time off object.',
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/TimeOff'
-                }
-              }
-            }
+                  $ref: '#/components/schemas/TimeOff',
+                },
+              },
+            },
           },
-          403: {
-            description: 'Authentication token is not valid.'
+          '403': {
+            description: 'Authentication token is not valid.',
           },
-          404: {
-            description: 'TimeOff is not found.'
-          }
-        }
-      }
-    }
-  }
-}
-// # sourceMappingURL=swagger.js.map
+          '404': {
+            description: 'TimeOff is not found.',
+          },
+        },
+      },
+    },
+  },
+};
+//# sourceMappingURL=swagger.js.map

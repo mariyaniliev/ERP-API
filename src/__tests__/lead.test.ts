@@ -1,7 +1,7 @@
 import faker from '@faker-js/faker'
 import supertest from 'supertest'
-import { createLead } from '../service/lead.service'
-import { createUser } from '../service/user.service'
+import { LeadService } from '../service/lead.service'
+import { UserService } from '../service/user.service'
 import createServer from '../utils/server'
 const app = createServer()
 const token = process.env.AUTHORIZATION
@@ -28,7 +28,7 @@ describe('lead', () => {
 
     describe('successful crud operations', () => {
       it('should return 200', async () => {
-        const user = await createUser({
+        const user = await UserService.createUser({
           email: faker.internet.email(),
           name: faker.name.firstName() + ' ' + faker.name.lastName(),
           password: faker.internet.password(),
@@ -39,7 +39,7 @@ describe('lead', () => {
 
         //* It should create a new lead and connect the user that we created to it
 
-        const lead = await createLead(user.id)
+        const lead = await LeadService.createLead(user.id)
 
         //* The lead that we just created should exist in our database
         await supertest(app)
