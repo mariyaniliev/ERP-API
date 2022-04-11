@@ -1,6 +1,6 @@
-import { get } from 'lodash'
 import { Request, Response, NextFunction } from 'express'
 import { Prisma } from '@prisma/client'
+import { get } from 'lodash'
 import { SessionService } from '../service/session.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import { verifyJwt } from '../utils/jwt.utils'

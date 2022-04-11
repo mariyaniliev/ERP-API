@@ -1,12 +1,5 @@
 import { Router } from 'express'
-import {
-  createUserHandler,
-  deleteUserHandler,
-  getUserHandler,
-  getUsersHandler,
-  searchUsersHandler,
-  updateUserHandler,
-} from '../controllers/user.controller'
+import { UserController } from '../controllers/user.controller'
 import { isAdmin } from '../middleware/isAdmin'
 import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 import { requireUser } from '../middleware/requireUser'
@@ -14,7 +7,7 @@ import { requireUser } from '../middleware/requireUser'
 const router = Router()
 
 // * Register (accepts query "leadId")
-router.post('/users', isAdmin, createUserHandler)
+router.post('/users', isAdmin, UserController.createUserHandler)
 /*
    ? Search queries avaiable:
    * emailOrName, 
@@ -23,14 +16,14 @@ router.post('/users', isAdmin, createUserHandler)
    * leadId, 
    * birthday
    */
-router.get('/users/search', requireUser, searchUsersHandler)
+router.get('/users/search', requireUser, UserController.searchUsersHandler)
 // * Return all users
-router.get('/users', requireUser, getUsersHandler)
+router.get('/users', requireUser, UserController.getUsersHandler)
 // * Return user
-router.get('/users/:id', requireUser, getUserHandler)
+router.get('/users/:id', requireUser, UserController.getUserHandler)
 // * Update user // Accepts query "leadId"
-router.patch('/users/:id', isAdminOrOwner, updateUserHandler)
+router.patch('/users/:id', isAdminOrOwner, UserController.updateUserHandler)
 // * Delete user
-router.delete('/users/:id', isAdminOrOwner, deleteUserHandler)
+router.delete('/users/:id', isAdminOrOwner, UserController.deleteUserHandler)
 
 export default router

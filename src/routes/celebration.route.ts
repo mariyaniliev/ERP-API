@@ -1,24 +1,18 @@
 import { Router } from 'express'
-import {
-  createCelebrationHandler,
-  deleteCelebrationHandler,
-  getCelebrationHandler,
-  getCelebrationsHandler,
-  updateCelebrationHandler,
-} from '../controllers/celebration.controller'
+import { CelebrationController } from '../controllers/celebration.controller'
 import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 
 const router = Router()
 
 // * Add new celebration
-router.post('/celebrations/:userId', isAdminOrOwner, createCelebrationHandler)
+router.post('/celebrations/:userId', isAdminOrOwner, CelebrationController.createCelebrationHandler)
 // * Return all celebrations
-router.get('/celebrations', getCelebrationsHandler)
+router.get('/celebrations', CelebrationController.getCelebrationsHandler)
 // * Return celebration
-router.get('/celebrations/:id', getCelebrationHandler)
+router.get('/celebrations/:id', CelebrationController.getCelebrationHandler)
 // * Update celebration
-router.patch('/celebrations/:id', isAdminOrOwner, updateCelebrationHandler)
+router.patch('/celebrations/:id', isAdminOrOwner, CelebrationController.updateCelebrationHandler)
 // * Delete celebration
-router.delete('/celebrations/:id', isAdminOrOwner, deleteCelebrationHandler)
+router.delete('/celebrations/:id', isAdminOrOwner, CelebrationController.deleteCelebrationHandler)
 
 export default router

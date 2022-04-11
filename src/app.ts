@@ -5,7 +5,7 @@ import checkUsersForBirthdays from './emails/birthdayEmail'
 import cron from 'node-cron'
 
 const app = createServer()
-const port = Number(process.env.PORT) || 3000
+const port = Number(process.env.PORT) || 4000
 const baseUrl = process.env.BASE_URL || 'http://localhost'
 
 app.listen(port, '0.0.0.0', () => {

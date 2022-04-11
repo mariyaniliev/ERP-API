@@ -1,16 +1,12 @@
 import { Router } from 'express'
-import {
-  createUserSessionHandler,
-  deleteSessionHandler,
-  getUserSessionHandler,
-} from '../controllers/session.controller'
+import { SessionController } from '../controllers/session.controller'
 
 const router = Router()
 
 // * Login session
-router.post('/sessions', createUserSessionHandler)
-router.get('/sessions', getUserSessionHandler)
+router.post('/sessions', SessionController.createUserSessionHandler)
+router.get('/sessions', SessionController.getUserSessionHandler)
 // * Logout
-router.delete('/sessions', deleteSessionHandler)
+router.delete('/sessions', SessionController.deleteSessionHandler)
 
 export default router

@@ -1,24 +1,18 @@
 import { Router } from 'express'
-import {
-  createTimeOffHandler,
-  deleteTimeOffHandler,
-  getTimeOffHandler,
-  getTimeOffsHandler,
-  updateTimeOffHandler,
-} from '../controllers/timeoff.controller'
+import { TimeOffController } from '../controllers/timeoff.controller'
 import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 
 const router = Router()
 
 // * Add new time off
-router.post('/timeoffs/:userId', isAdminOrOwner, createTimeOffHandler)
+router.post('/timeoffs/:userId', isAdminOrOwner, TimeOffController.createTimeOffHandler)
 // * Return all time off's
-router.get('/timeoffs', getTimeOffsHandler)
+router.get('/timeoffs', TimeOffController.getTimeOffsHandler)
 // * Return time off
-router.get('/timeoffs/:id', getTimeOffHandler)
+router.get('/timeoffs/:id', TimeOffController.getTimeOffHandler)
 // * Update time off
-router.patch('/timeoffs/:id', isAdminOrOwner, updateTimeOffHandler)
+router.patch('/timeoffs/:id', isAdminOrOwner, TimeOffController.updateTimeOffHandler)
 // * Delete time off
-router.delete('/timeoffs/:id', isAdminOrOwner, deleteTimeOffHandler)
+router.delete('/timeoffs/:id', isAdminOrOwner, TimeOffController.deleteTimeOffHandler)
 
 export default router

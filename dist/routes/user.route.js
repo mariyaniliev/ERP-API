@@ -7,7 +7,7 @@ const isAdminOrOwner_1 = require('../middleware/isAdminOrOwner');
 const requireUser_1 = require('../middleware/requireUser');
 const router = (0, express_1.Router)();
 // * Register (accepts query "leadId")
-router.post('/users', isAdmin_1.isAdmin, user_controller_1.createUserHandler);
+router.post('/users', isAdmin_1.isAdmin, user_controller_1.UserController.createUserHandler);
 /*
    ? Search queries avaiable:
    * emailOrName,
@@ -16,14 +16,14 @@ router.post('/users', isAdmin_1.isAdmin, user_controller_1.createUserHandler);
    * leadId,
    * birthday
    */
-router.get('/users/search', requireUser_1.requireUser, user_controller_1.searchUsersHandler);
+router.get('/users/search', requireUser_1.requireUser, user_controller_1.UserController.searchUsersHandler);
 // * Return all users
-router.get('/users', requireUser_1.requireUser, user_controller_1.getUsersHandler);
+router.get('/users', requireUser_1.requireUser, user_controller_1.UserController.getUsersHandler);
 // * Return user
-router.get('/users/:id', requireUser_1.requireUser, user_controller_1.getUserHandler);
+router.get('/users/:id', requireUser_1.requireUser, user_controller_1.UserController.getUserHandler);
 // * Update user // Accepts query "leadId"
-router.patch('/users/:id', isAdminOrOwner_1.isAdminOrOwner, user_controller_1.updateUserHandler);
+router.patch('/users/:id', isAdminOrOwner_1.isAdminOrOwner, user_controller_1.UserController.updateUserHandler);
 // * Delete user
-router.delete('/users/:id', isAdminOrOwner_1.isAdminOrOwner, user_controller_1.deleteUserHandler);
+router.delete('/users/:id', isAdminOrOwner_1.isAdminOrOwner, user_controller_1.UserController.deleteUserHandler);
 exports.default = router;
 //# sourceMappingURL=user.route.js.map
