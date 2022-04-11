@@ -89,6 +89,7 @@ class UserService {
   }
   static async searchUsers(query) {
     const { emailOrName, leadId, birthday, startingDate } = query;
+    const timeOffRemainingDays = Number(query.timeOffRemainingDays);
     const limit = Number(query.limit) || 10;
     const page = Number(query.page) || 1;
     const startIndex = (page - 1) * limit;
@@ -114,6 +115,9 @@ class UserService {
             },
             startingDate: {
               contains: startingDate?.trim(),
+            },
+            timeOffRemainingDays: {
+              equals: timeOffRemainingDays,
             },
           },
         ],
@@ -143,6 +147,9 @@ class UserService {
             },
             startingDate: {
               contains: startingDate?.trim(),
+            },
+            timeOffRemainingDays: {
+              equals: timeOffRemainingDays,
             },
           },
         ],

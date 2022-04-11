@@ -8,7 +8,7 @@ const server_1 = __importDefault(require('./utils/server'));
 const birthdayEmail_1 = __importDefault(require('./emails/birthdayEmail'));
 const node_cron_1 = __importDefault(require('node-cron'));
 const app = (0, server_1.default)();
-const port = Number(process.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 4000;
 const baseUrl = process.env.BASE_URL || 'http://localhost';
 app.listen(port, '0.0.0.0', () => {
   logger_1.default.info(`App is running at ${baseUrl}:${port}`);
