@@ -98,7 +98,7 @@ export class UserService {
     timeOffRemainingDays?: string
   }) {
     const { emailOrName, leadId, birthday, startingDate } = query
-    const timeOffRemainingDays = Number(query.timeOffRemainingDays)
+    const timeOffRemainingDays = query.timeOffRemainingDays ? Number(query.timeOffRemainingDays) : undefined
     const limit = Number(query.limit) || 10
     const page = Number(query.page) || 1
 

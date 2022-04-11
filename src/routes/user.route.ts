@@ -3,11 +3,11 @@ import { UserController } from '../controllers/user.controller'
 import { isAdmin } from '../middleware/isAdmin'
 import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 import { requireUser } from '../middleware/requireUser'
-
+import { timeOffModifyGuard } from '../middleware/timeOffModifyGuard'
 const router = Router()
 
 // * Register (accepts query "leadId")
-router.post('/users', isAdmin, UserController.createUserHandler)
+router.post('/users', isAdmin, timeOffModifyGuard, UserController.createUserHandler)
 /*
    ? Search queries avaiable:
    * emailOrName, 
@@ -22,7 +22,7 @@ router.get('/users', requireUser, UserController.getUsersHandler)
 // * Return user
 router.get('/users/:id', requireUser, UserController.getUserHandler)
 // * Update user // Accepts query "leadId"
-router.patch('/users/:id', isAdminOrOwner, UserController.updateUserHandler)
+router.patch('/users/:id', isAdminOrOwner, timeOffModifyGuard, UserController.updateUserHandler)
 // * Delete user
 router.delete('/users/:id', isAdminOrOwner, UserController.deleteUserHandler)
 
