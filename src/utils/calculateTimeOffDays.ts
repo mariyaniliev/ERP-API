@@ -3,20 +3,23 @@ import { getHolidays } from 'public-holidays'
 export const calculateTimeOffDays = (startDate: Date, endDate: Date) => {
   const fromDate = new Date(startDate)
   const toDate = new Date(endDate)
-  const numOfDates = getBusinessDatesCount(fromDate, toDate)
+  const timeOffDaysInfo = getBusinessDatesCount(fromDate, toDate)
 
   async function getBusinessDatesCount(fromDate: Date, toDate: Date) {
     let count = 0
-    const timeOffDays = new Set()
+    const timeOffDays: Set<string> = new Set()
     const curDate = fromDate
 
     while (curDate <= toDate) {
       const dayOfWeek = curDate.getDay()
 
       const formattedDate = `${curDate.getMonth() + 1}/${curDate.getDate()}/${curDate.getFullYear()}`
-      console.log(curDate)
+      const today = new Date()
+      if (today > curDate) {
+        throw new Error('Sorry, you cant book days in past')
+      }
 
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      if (dayOfWeek !== 0 && dayOfWeek !== 6 && today) {
         timeOffDays.add(formattedDate)
         count++
       }
@@ -44,12 +47,14 @@ export const calculateTimeOffDays = (startDate: Date, endDate: Date) => {
       .forEach((holiday) => {
         timeOffDays.forEach((day) => {
           if (day === holiday) {
+            timeOffDays.delete(day)
             count -= 1
           }
         })
       })
 
-    return count < 0 ? 0 : count
+    count = count < 0 ? 0 : count
+    return { timeOffDays, count }
   }
-  return numOfDates
+  return timeOffDaysInfo
 }

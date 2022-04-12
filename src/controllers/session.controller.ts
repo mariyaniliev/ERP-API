@@ -5,6 +5,7 @@ import { UserAuthService } from '../service/user.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import { signJwt } from '../utils/jwt.utils'
 import logger from '../utils/logger'
+import { omit } from 'lodash'
 
 export class SessionController {
   static async createUserSessionHandler(req: Request, res: Response) {
@@ -19,7 +20,26 @@ export class SessionController {
 
       const refreshToken = signJwt({ ...user, session: session.id }, { expiresIn: process.env.JWT_REFRESH_TOKEN_TTL })
 
-      return res.send({ accessToken, refreshToken })
+      return res.send({
+        ...omit(
+          user,
+          'password',
+          'enabled',
+          'timeOffRemainingDays',
+          'authority',
+          'alcohol',
+          'createdAt',
+          'updatedAt',
+          'birthday',
+          'startingDate',
+          'phone',
+          'discord',
+          'leadId',
+          'tshirtSize'
+        ),
+        accessToken,
+        refreshToken,
+      })
     } catch (error) {
       const typedError = error as Prisma.PrismaClientKnownRequestError
       logger.error(typedError)

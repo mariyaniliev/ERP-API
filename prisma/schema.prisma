@@ -39,6 +39,7 @@ model User {
   celebration          Celebration[]
   leading              Lead?          @relation("LeadingCategory")
   lead                 Lead?          @relation("LeadCategory", fields: [leadId], references: [id])
+  timeOffDates         String[]
 
 
   @@map("users")
