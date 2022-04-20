@@ -21,19 +21,31 @@ prisma.$use(async (params, next) => {
   if (params.action === 'create' && params.model === 'TimeOff') {
     const startDate = params.args.data.startDate;
     const endDate = params.args.data.endDate;
-    const timeOffDays = await (0, calculateTimeOffDays_1.calculateTimeOffDays)(startDate, endDate);
-    if (timeOffDays === 0) {
+    const { count: timeOffDaysCount, timeOffDays } = await (0, calculateTimeOffDays_1.calculateTimeOffDays)(startDate, endDate);
+    if (timeOffDaysCount === 0) {
       throw new Error('You are trying to book 0 days.\nPlease check if requested dates are business days');
     }
     const userId = params.args.data.user.connect.id;
     const user = await prisma.user.findFirst({ where: { id: userId } });
     if (user) {
-      if (user.timeOffRemainingDays - timeOffDays <= 0) {
+      const selectedTimeOffDays = [...timeOffDays];
+      const userTimeOffDays = user?.timeOffDates;
+      selectedTimeOffDays.forEach((selectedDay) => {
+        userTimeOffDays.forEach((existingDay) => {
+          if (selectedDay === existingDay) {
+            throw new Error(`${selectedDay} is already booked.`);
+          }
+        });
+      });
+      if (user.timeOffRemainingDays - timeOffDaysCount <= 0) {
         throw new Error('Remaining time off days are not enough!');
       }
       const updatedUser = await prisma.user.update({
         where: { id: userId },
-        data: { timeOffRemainingDays: user.timeOffRemainingDays - timeOffDays },
+        data: {
+          timeOffRemainingDays: user.timeOffRemainingDays - timeOffDaysCount,
+          timeOffDates: { push: [...selectedTimeOffDays] },
+        },
       });
       logger_1.default.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`);
     }

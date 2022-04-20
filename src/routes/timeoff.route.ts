@@ -8,6 +8,8 @@ const router = Router()
 router.post('/timeoffs/:userId', isAdminOrOwner, TimeOffController.createTimeOffHandler)
 // * Return all time off's
 router.get('/timeoffs', TimeOffController.getTimeOffsHandler)
+// * Search time off's
+router.get('/timeoffs/search', TimeOffController.searchTimeOffsHandler)
 // * Return time off
 router.get('/timeoffs/:id', TimeOffController.getTimeOffHandler)
 // * Update time off

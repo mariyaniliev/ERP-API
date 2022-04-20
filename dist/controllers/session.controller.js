@@ -9,6 +9,7 @@ const user_service_1 = require('../service/user.service');
 const prismaerror_utils_1 = require('../utils/prismaerror.utils');
 const jwt_utils_1 = require('../utils/jwt.utils');
 const logger_1 = __importDefault(require('../utils/logger'));
+const lodash_1 = require('lodash');
 class SessionController {
   static async createUserSessionHandler(req, res) {
     try {
@@ -18,7 +19,11 @@ class SessionController {
       const session = await session_service_1.SessionService.createSession(user.id, req.get('user-agent') || '');
       const accessToken = (0, jwt_utils_1.signJwt)({ ...user, session: session.id }, { expiresIn: process.env.JWT_TOKEN_TTL });
       const refreshToken = (0, jwt_utils_1.signJwt)({ ...user, session: session.id }, { expiresIn: process.env.JWT_REFRESH_TOKEN_TTL });
-      return res.send({ accessToken, refreshToken });
+      return res.send({
+        ...(0, lodash_1.omit)(user, 'password', 'enabled', 'timeOffRemainingDays', 'authority', 'alcohol', 'createdAt', 'updatedAt', 'birthday', 'startingDate', 'phone', 'discord', 'leadId', 'tshirtSize'),
+        accessToken,
+        refreshToken,
+      });
     }
     catch (error) {
       const typedError = error;

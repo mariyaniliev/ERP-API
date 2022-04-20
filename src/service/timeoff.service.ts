@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, TimeOffTypes } from '@prisma/client'
 import logger from '../utils/logger'
 import prisma from '../utils/client'
 
@@ -35,12 +35,92 @@ export class TimeOffService {
         user: {
           select: {
             name: true,
-            email: true,
           },
         },
       },
     })
     return { data: timeOffs, resultsCount }
+  }
+  static async searchTimeOffs(query: {
+    period?: string
+    type?: TimeOffTypes
+    approved?: string
+    page?: string
+    limit?: string
+    emailOrName?: string
+  }) {
+    let type = query.type
+    let period = query.period
+
+    type = (type as string) === '' ? undefined : type
+    period = (period as string) === '' ? undefined : period
+
+    const approved = query.approved === 'true' ? true : query.approved === 'false' ? false : undefined
+
+    const limit = Number(query.limit) || 10
+    const page = Number(query.page) || 1
+
+    const past = period === 'past' || period === 'today' ? new Date() : undefined
+    const future = period === 'future' || period === 'today' ? new Date() : undefined
+    const emailOrName = query.emailOrName
+
+    const startIndex = (page - 1) * limit
+    console.log(emailOrName)
+
+    const resultsCount = await prisma.timeOff.count({
+      where: {
+        approved: {
+          equals: approved,
+        },
+        type: {
+          equals: type,
+        },
+        user: {
+          name: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+        endDate: {
+          gt: future,
+        },
+        startDate: {
+          lt: past,
+        },
+      },
+    })
+    const searchedTimeOffs = await prisma.timeOff.findMany({
+      take: limit,
+      skip: startIndex,
+      where: {
+        approved: {
+          equals: approved,
+        },
+        type: {
+          equals: type,
+        },
+        user: {
+          name: {
+            contains: emailOrName?.trim(),
+            mode: 'insensitive',
+          },
+        },
+        endDate: {
+          gt: future,
+        },
+        startDate: {
+          lt: past,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    })
+    return { data: searchedTimeOffs, resultsCount }
   }
   static async updateTimeOff(id: string, input: Prisma.LeadUpdateInput) {
     const updatedTimeOff = await prisma.timeOff.update({ where: { id }, data: input })

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Prisma } from '@prisma/client'
+import { Prisma, TimeOffTypes } from '@prisma/client'
 import { TimeOffService } from '../service/timeoff.service'
 import { errorMessage } from '../utils/prismaerror.utils'
 import logger from '../utils/logger'
@@ -31,6 +31,31 @@ export class TimeOffController {
       return res.status(404).send(errorMessage(typedError))
     }
   }
+  static async searchTimeOffsHandler(
+    req: Request<
+      Record<string, unknown>,
+      Record<string, unknown>,
+      Record<string, unknown>,
+      {
+        period?: string
+        type?: TimeOffTypes
+        approved?: string
+        page?: string
+        limit?: string
+        emailOrName?: string
+      }
+    >,
+    res: Response
+  ) {
+    try {
+      const results = await TimeOffService.searchTimeOffs(req.query)
+      return res.send(results)
+    } catch (error) {
+      const typedError = error as Prisma.PrismaClientKnownRequestError
+      logger.error(typedError)
+      return res.status(409).send(errorMessage(typedError))
+    }
+  }
   static async getTimeOffsHandler(
     req: Request<
       Record<string, unknown>,
@@ -50,6 +75,9 @@ export class TimeOffController {
     try {
       const { id } = req.params
       const input = req.body
+      if (input.approved === true && res.locals.user.authority !== 'Admin') {
+        return res.sendStatus(403)
+      }
 
       const timeOff = await TimeOffService.findTimeOff(id)
       if (!timeOff) {

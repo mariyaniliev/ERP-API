@@ -19,26 +19,27 @@ model Session {
 }
 
 model User {
-  id                   String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email                String         @unique @db.VarChar(50)
-  name                 String         @db.VarChar(50)
-  password             String         @db.VarChar(80)
-  enabled              Boolean        @default(false)
-  timeOffRemainingDays Int            @default(22)
-  authority            AuthorityTypes @default(User)
+  id                   String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String           @unique @db.VarChar(50)
+  name                 String           @db.VarChar(50)
+  password             String           @db.VarChar(80)
+  enabled              Boolean          @default(false)
+  timeOffRemainingDays Int              @default(22)
+  authority            AuthorityTypes   @default(User)
+  roles                AuthorityTypes[]
   timeOffs             TimeOff[]
   alcohol              AlcoholTypes?
-  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt            DateTime?      @updatedAt @map("updated_at") @db.Timestamptz(6)
-  birthday             String?        @map("day_of_birth")
-  startingDate         String?        @map("start_date")
-  phone                String?        @db.VarChar(50)
-  discord              String?        @db.VarChar(50)
-  leadId               String?        @db.Uuid
+  createdAt            DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  birthday             String?          @map("day_of_birth")
+  startingDate         String?          @map("start_date")
+  phone                String?          @db.VarChar(50)
+  discord              String?          @db.VarChar(50)
+  leadId               String?          @db.Uuid
   tshirtSize           TshirtSizes?
   celebration          Celebration[]
-  leading              Lead?          @relation("LeadingCategory")
-  lead                 Lead?          @relation("LeadCategory", fields: [leadId], references: [id])
+  leading              Lead?            @relation("LeadingCategory")
+  lead                 Lead?            @relation("LeadCategory", fields: [leadId], references: [id])
   timeOffDates         String[]
 
 
@@ -80,8 +81,24 @@ model Celebration {
   userId    String        @db.Uuid
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([startDate])
   @@map("celebrations")
+}
+
+model ApprovedTimeOff {
+  id       String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId   String
+  dates    String[]
+  holder   ApprovedTimeOffsHolder @relation(fields: [holderId], references: [id])
+  holderId String                 @db.Uuid
+
+  @@map("approved_time_off")
+}
+
+model ApprovedTimeOffsHolder {
+  id    String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dates ApprovedTimeOff[]
+
+  @@map("approved_time_offs")
 }
 
 enum TshirtSizes {

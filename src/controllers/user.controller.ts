@@ -96,7 +96,9 @@ export class UserController {
   ) {
     if (res.locals.user.authority !== 'Admin') {
       req.body.authority = undefined
+      req.body.roles = undefined
     }
+
     try {
       const user = await UserService.updateUser(req.body, req.params.id, req.query.leadId)
       return res.send(omit(user, 'password'))

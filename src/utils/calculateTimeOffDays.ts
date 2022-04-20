@@ -19,7 +19,7 @@ export const calculateTimeOffDays = (startDate: Date, endDate: Date) => {
         throw new Error('Sorry, you cant book days in past')
       }
 
-      if (dayOfWeek !== 0 && dayOfWeek !== 6 && today) {
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
         timeOffDays.add(formattedDate)
         count++
       }

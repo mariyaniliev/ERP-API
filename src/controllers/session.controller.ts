@@ -35,7 +35,8 @@ export class SessionController {
           'phone',
           'discord',
           'leadId',
-          'tshirtSize'
+          'tshirtSize',
+          'timeOffDates'
         ),
         accessToken,
         refreshToken,

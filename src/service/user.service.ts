@@ -75,14 +75,15 @@ export class UserService {
             leadInfo: {
               select: {
                 name: true,
-                email: true,
-                discord: true,
+                id: true,
               },
             },
           },
         },
         celebration: { select: { id: true, occasion: true, startDate: true, enabled: true } },
         timeOffRemainingDays: true,
+        timeOffDates: true,
+        roles: true,
       },
     })
     return { data: users, resultsCount }
@@ -106,65 +107,56 @@ export class UserService {
 
     const resultsCount = await prisma.user.count({
       where: {
-        OR: [
-          {
-            email: {
-              contains: emailOrName?.trim(),
-              mode: 'insensitive',
-            },
-          },
-          {
-            name: {
-              contains: emailOrName?.trim(),
-              mode: 'insensitive',
-            },
-            lead: {
-              id: leadId,
-            },
-            birthday: {
-              contains: birthday?.trim(),
-            },
-            startingDate: {
-              contains: startingDate?.trim(),
-            },
-            timeOffRemainingDays: {
-              equals: timeOffRemainingDays,
-            },
-          },
-        ],
+        email: {
+          contains: emailOrName?.trim(),
+          mode: 'insensitive',
+        },
+
+        name: {
+          contains: emailOrName?.trim(),
+          mode: 'insensitive',
+        },
+        lead: {
+          id: leadId,
+        },
+        birthday: {
+          contains: birthday?.trim(),
+        },
+
+        startingDate: {
+          contains: startingDate?.trim(),
+        },
+        timeOffRemainingDays: {
+          equals: timeOffRemainingDays,
+        },
       },
     })
     const searchedUsers = await prisma.user.findMany({
       take: limit,
       skip: startIndex,
       where: {
-        OR: [
-          {
-            email: {
-              contains: emailOrName?.trim(),
-              mode: 'insensitive',
-            },
-          },
-          {
-            name: {
-              contains: emailOrName?.trim(),
-              mode: 'insensitive',
-            },
-            lead: {
-              id: leadId,
-            },
-            birthday: {
-              contains: birthday?.trim(),
-            },
+        email: {
+          contains: emailOrName?.trim(),
+          mode: 'insensitive',
+        },
 
-            startingDate: {
-              contains: startingDate?.trim(),
-            },
-            timeOffRemainingDays: {
-              equals: timeOffRemainingDays,
-            },
-          },
-        ],
+        name: {
+          contains: emailOrName?.trim(),
+          mode: 'insensitive',
+        },
+        lead: {
+          id: leadId,
+        },
+        birthday: {
+          contains: birthday?.trim(),
+        },
+
+        startingDate: {
+          contains: startingDate?.trim(),
+        },
+        timeOffRemainingDays: {
+          equals: timeOffRemainingDays,
+        },
       },
       select: {
         id: true,
@@ -186,14 +178,15 @@ export class UserService {
             leadInfo: {
               select: {
                 name: true,
-                email: true,
-                discord: true,
+                id: true,
               },
             },
           },
         },
-        celebration: { select: { occasion: true, startDate: true, enabled: true } },
+        celebration: { select: { occasion: true, startDate: true } },
         timeOffRemainingDays: true,
+        timeOffDates: true,
+        roles: true,
       },
     })
     return { data: searchedUsers, resultsCount }

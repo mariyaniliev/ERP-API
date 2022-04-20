@@ -5,7 +5,7 @@ const public_holidays_1 = require('public-holidays');
 const calculateTimeOffDays = (startDate, endDate) => {
   const fromDate = new Date(startDate);
   const toDate = new Date(endDate);
-  const numOfDates = getBusinessDatesCount(fromDate, toDate);
+  const timeOffDaysInfo = getBusinessDatesCount(fromDate, toDate);
   async function getBusinessDatesCount(fromDate, toDate) {
     let count = 0;
     const timeOffDays = new Set();
@@ -13,8 +13,11 @@ const calculateTimeOffDays = (startDate, endDate) => {
     while (curDate <= toDate) {
       const dayOfWeek = curDate.getDay();
       const formattedDate = `${curDate.getMonth() + 1}/${curDate.getDate()}/${curDate.getFullYear()}`;
-      console.log(curDate);
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      const today = new Date();
+      if (today > curDate) {
+        throw new Error('Sorry, you cant book days in past');
+      }
+      if (dayOfWeek !== 0 && dayOfWeek !== 6 && today) {
         timeOffDays.add(formattedDate);
         count++;
       }
@@ -38,13 +41,15 @@ const calculateTimeOffDays = (startDate, endDate) => {
       .forEach((holiday) => {
         timeOffDays.forEach((day) => {
           if (day === holiday) {
+            timeOffDays.delete(day);
             count -= 1;
           }
         });
       });
-    return count < 0 ? 0 : count;
+    count = count < 0 ? 0 : count;
+    return { timeOffDays, count };
   }
-  return numOfDates;
+  return timeOffDaysInfo;
 };
 exports.calculateTimeOffDays = calculateTimeOffDays;
 //# sourceMappingURL=calculateTimeOffDays.js.map

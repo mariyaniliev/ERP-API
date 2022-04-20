@@ -83,13 +83,14 @@ class UserService {
         },
         celebration: { select: { id: true, occasion: true, startDate: true, enabled: true } },
         timeOffRemainingDays: true,
+        timeOffDates: true,
       },
     });
     return { data: users, resultsCount };
   }
   static async searchUsers(query) {
     const { emailOrName, leadId, birthday, startingDate } = query;
-    const timeOffRemainingDays = Number(query.timeOffRemainingDays);
+    const timeOffRemainingDays = query.timeOffRemainingDays ? Number(query.timeOffRemainingDays) : undefined;
     const limit = Number(query.limit) || 10;
     const page = Number(query.page) || 1;
     const startIndex = (page - 1) * limit;
