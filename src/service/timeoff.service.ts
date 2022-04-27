@@ -92,6 +92,7 @@ export class TimeOffService {
     const searchedTimeOffs = await prisma.timeOff.findMany({
       take: limit,
       skip: startIndex,
+
       where: {
         approved: {
           equals: approved,
@@ -119,6 +120,11 @@ export class TimeOffService {
           },
         },
       },
+      orderBy: [
+        {
+          updatedAt: 'desc',
+        },
+      ],
     })
     return { data: searchedTimeOffs, resultsCount }
   }

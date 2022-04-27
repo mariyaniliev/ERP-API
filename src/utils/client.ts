@@ -95,20 +95,20 @@ prisma.$use(async (params, next) => {
         if (user.timeOffRemainingDays - timeOffDaysCount <= 0) {
           throw new Error('Remaining time off days are not enough!')
         }
+        if (params.args.data.uploaded === true) {
+          await prisma.approvedTimeOff.create({
+            data: { userId, holder: { connect: { id: timeOffsHolder.id } }, dates: [...selectedTimeOffDays] },
+          })
 
-        await prisma.approvedTimeOff.create({
-          data: { userId, holder: { connect: { id: timeOffsHolder.id } }, dates: [...selectedTimeOffDays] },
-        })
-
-        const updatedUser = await prisma.user.update({
-          where: { id: userId },
-          data: {
-            timeOffRemainingDays: user.timeOffRemainingDays - timeOffDaysCount,
-            timeOffDates: { push: [...selectedTimeOffDays] },
-          },
-        })
-
-        logger.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`)
+          const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: {
+              timeOffRemainingDays: user.timeOffRemainingDays - timeOffDaysCount,
+              timeOffDates: { push: [...selectedTimeOffDays] },
+            },
+          })
+          logger.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`)
+        }
       }
     }
   }

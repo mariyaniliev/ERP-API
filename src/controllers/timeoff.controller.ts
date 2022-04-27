@@ -11,6 +11,10 @@ export class TimeOffController {
   ) {
     try {
       const { userId } = req.params
+      const input = req.body
+      if (input.approved === true && res.locals.user.authority !== 'Admin') {
+        return res.sendStatus(403)
+      }
       const timeOff = await TimeOffService.createTimeOff(req.body, userId)
 
       return res.send(timeOff)
