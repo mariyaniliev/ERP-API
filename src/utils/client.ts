@@ -67,7 +67,11 @@ prisma.$use(async (params, next) => {
       if (!timeOff) {
         throw new Error('Time off not found.')
       }
-      const { userId, startDate, endDate } = timeOff
+      const { userId, startDate, endDate, uploaded } = timeOff
+
+      if (uploaded) {
+        throw new Error('Time off was already approved and signed up')
+      }
 
       const user = await prisma.user.findFirst({ where: { id: userId } })
       if (user) {
