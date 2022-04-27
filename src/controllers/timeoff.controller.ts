@@ -12,7 +12,7 @@ export class TimeOffController {
     try {
       const { userId } = req.params
       const input = req.body
-      if (input.approved === true && res.locals.user.authority !== 'Admin') {
+      if ((input.approved === true || input.uploaded === true) && res.locals.user.authority !== 'Admin') {
         return res.sendStatus(403)
       }
       const timeOff = await TimeOffService.createTimeOff(req.body, userId)
@@ -79,7 +79,7 @@ export class TimeOffController {
     try {
       const { id } = req.params
       const input = req.body
-      if (input.approved === true && res.locals.user.authority !== 'Admin') {
+      if ((input.approved === true || input.uploaded === true) && res.locals.user.authority !== 'Admin') {
         return res.sendStatus(403)
       }
 
