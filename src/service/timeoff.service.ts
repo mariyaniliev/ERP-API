@@ -65,7 +65,6 @@ export class TimeOffService {
     const emailOrName = query.emailOrName
 
     const startIndex = (page - 1) * limit
-    console.log(emailOrName)
 
     const resultsCount = await prisma.timeOff.count({
       where: {
@@ -92,7 +91,11 @@ export class TimeOffService {
     const searchedTimeOffs = await prisma.timeOff.findMany({
       take: limit,
       skip: startIndex,
-
+      orderBy: [
+        {
+          updatedAt: 'desc',
+        },
+      ],
       where: {
         approved: {
           equals: approved,
@@ -117,15 +120,10 @@ export class TimeOffService {
         user: {
           select: {
             name: true,
-            roles: true,
+            position: true,
           },
         },
       },
-      orderBy: [
-        {
-          updatedAt: 'desc',
-        },
-      ],
     })
     return { data: searchedTimeOffs, resultsCount }
   }

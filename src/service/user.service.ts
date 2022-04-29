@@ -84,6 +84,7 @@ export class UserService {
         timeOffRemainingDays: true,
         timeOffDates: true,
         roles: true,
+        position: true,
       },
     })
     return { data: users, resultsCount }
@@ -187,6 +188,7 @@ export class UserService {
         timeOffRemainingDays: true,
         timeOffDates: true,
         roles: true,
+        position: true,
       },
     })
     return { data: searchedUsers, resultsCount }

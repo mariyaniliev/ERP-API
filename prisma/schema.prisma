@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+
 }
 
 datasource db {
@@ -24,6 +25,7 @@ model User {
   name                 String           @db.VarChar(50)
   password             String           @db.VarChar(80)
   enabled              Boolean          @default(false)
+  position             PositionTypes    @default(Developer)
   timeOffRemainingDays Int              @default(22)
   authority            AuthorityTypes   @default(User)
   roles                AuthorityTypes[]
@@ -137,11 +139,15 @@ enum AuthorityTypes {
   User
   Accounting
   HR
-  FrontEnd
-  BackEnd
-  Manager
 
   @@map("authority_types")
+}
+
+enum PositionTypes {
+  Developer
+  HR
+  Accountant
+  Manager
 }
 
 enum AlcoholTypes {
