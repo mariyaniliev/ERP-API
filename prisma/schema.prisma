@@ -137,6 +137,9 @@ enum AuthorityTypes {
   User
   Accounting
   HR
+  FrontEnd
+  BackEnd
+  Manager
 
   @@map("authority_types")
 }

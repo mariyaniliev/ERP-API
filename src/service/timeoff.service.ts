@@ -117,6 +117,7 @@ export class TimeOffService {
         user: {
           select: {
             name: true,
+            roles: true,
           },
         },
       },
