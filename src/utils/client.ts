@@ -60,19 +60,26 @@ prisma.$use(async (params, next) => {
     }
   }
   if (params.action === 'update' && params.model === 'TimeOff') {
+    const timeOffId = params.args.where.id
+    const timeOff = await prisma.timeOff.findFirst({ where: { id: timeOffId } })
+
+    if (!timeOff) {
+      throw new Error('Time off not found.')
+    }
+
+    const { userId, startDate, endDate, uploaded, id } = timeOff
+
+    if (uploaded) {
+      const timeOffsHolder = await prisma.approvedTimeOffsHolder.findFirst({ include: { dates: true } })
+      console.log(timeOffsHolder)
+
+      const sourceUrl = params.args.data.sourceUrl
+      const fileName = params.args.data.fileName
+      params.args.data = { sourceUrl, fileName }
+      return next(params)
+    }
+
     if (params.args.data.approved === true) {
-      const timeOffId = params.args.where.id
-
-      const timeOff = await prisma.timeOff.findFirst({ where: { id: timeOffId } })
-      if (!timeOff) {
-        throw new Error('Time off not found.')
-      }
-      const { userId, startDate, endDate, uploaded } = timeOff
-
-      if (uploaded) {
-        throw new Error('Time off was already approved and signed up')
-      }
-
       const user = await prisma.user.findFirst({ where: { id: userId } })
       if (user) {
         const { count: timeOffDaysCount, timeOffDays } = await calculateTimeOffDays(startDate, endDate)
@@ -99,20 +106,23 @@ prisma.$use(async (params, next) => {
         if (user.timeOffRemainingDays - timeOffDaysCount <= 0) {
           throw new Error('Remaining time off days are not enough!')
         }
-        if (params.args.data.uploaded === true) {
-          await prisma.approvedTimeOff.create({
-            data: { userId, holder: { connect: { id: timeOffsHolder.id } }, dates: [...selectedTimeOffDays] },
-          })
+        await prisma.approvedTimeOff.create({
+          data: {
+            userId,
+            holder: { connect: { id: timeOffsHolder.id } },
+            timeOffSource: { connect: { id } },
+            dates: [...selectedTimeOffDays],
+          },
+        })
 
-          const updatedUser = await prisma.user.update({
-            where: { id: userId },
-            data: {
-              timeOffRemainingDays: user.timeOffRemainingDays - timeOffDaysCount,
-              timeOffDates: { push: [...selectedTimeOffDays] },
-            },
-          })
-          logger.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`)
-        }
+        const updatedUser = await prisma.user.update({
+          where: { id: userId },
+          data: {
+            timeOffRemainingDays: user.timeOffRemainingDays - timeOffDaysCount,
+            timeOffDates: { push: [...selectedTimeOffDays] },
+          },
+        })
+        logger.info(`${updatedUser.name} day off remaining days are now ${updatedUser.timeOffRemainingDays}`)
       }
     }
   }

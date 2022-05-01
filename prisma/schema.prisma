@@ -59,18 +59,33 @@ model Lead {
 }
 
 model TimeOff {
-  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String       @db.Uuid
-  startDate DateTime     @map("start_date") @db.Timestamptz(6)
-  endDate   DateTime     @map("end_date") @db.Timestamptz(6)
-  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime?    @updatedAt @map("updated_at") @db.Timestamptz(6)
-  approved  Boolean      @default(false)
-  uploaded  Boolean      @default(false)
-  type      TimeOffTypes
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String           @db.Uuid
+  startDate       DateTime         @map("start_date") @db.Timestamptz(6)
+  endDate         DateTime         @map("end_date") @db.Timestamptz(6)
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime?        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  approved        Boolean          @default(false)
+  uploaded        Boolean          @default(false)
+  sourceUrl       String?
+  fileName        String?
+  type            TimeOffTypes
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approvedTimeOff ApprovedTimeOff?
 
   @@map("timeoffs")
+}
+
+model ApprovedTimeOff {
+  id              String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String
+  dates           String[]
+  holder          ApprovedTimeOffsHolder @relation(fields: [holderId], references: [id])
+  holderId        String                 @db.Uuid
+  timeOffSource   TimeOff                @relation(fields: [timeOffSourceId], references: [id], onDelete: Cascade)
+  timeOffSourceId String                 @unique @db.Uuid
+
+  @@map("approved_time_off")
 }
 
 model Celebration {
@@ -84,16 +99,6 @@ model Celebration {
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("celebrations")
-}
-
-model ApprovedTimeOff {
-  id       String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId   String
-  dates    String[]
-  holder   ApprovedTimeOffsHolder @relation(fields: [holderId], references: [id])
-  holderId String                 @db.Uuid
-
-  @@map("approved_time_off")
 }
 
 model ApprovedTimeOffsHolder {

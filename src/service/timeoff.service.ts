@@ -19,7 +19,7 @@ export class TimeOffService {
   static async findTimeOff(id: string) {
     const timeOff = await prisma.timeOff.findFirst({
       where: { id },
-      include: { user: { select: { name: true, email: true } } },
+      include: { user: { select: { name: true, email: true } }, approvedTimeOff: true },
     })
     return timeOff
   }
@@ -37,6 +37,7 @@ export class TimeOffService {
             name: true,
           },
         },
+        approvedTimeOff: true,
       },
     })
     return { data: timeOffs, resultsCount }
@@ -123,12 +124,17 @@ export class TimeOffService {
             position: true,
           },
         },
+        approvedTimeOff: true,
       },
     })
     return { data: searchedTimeOffs, resultsCount }
   }
   static async updateTimeOff(id: string, input: Prisma.LeadUpdateInput) {
-    const updatedTimeOff = await prisma.timeOff.update({ where: { id }, data: input })
+    const updatedTimeOff = await prisma.timeOff.update({
+      where: { id },
+      data: input,
+      include: { approvedTimeOff: true },
+    })
     return updatedTimeOff
   }
   static async deleteTimeOff(id: string) {
