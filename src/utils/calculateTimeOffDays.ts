@@ -15,7 +15,6 @@ const officialHolidays = [
   'Christmas Eve',
   'Christmas Day',
   'Second day of Christmas',
-  'Christmas holiday',
 ]
 
 export const calculateTimeOffDays = (startDate: Date, endDate: Date, pastDaysAllowed?: boolean) => {
