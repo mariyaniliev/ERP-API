@@ -4,6 +4,8 @@ import { isAdminOrOwner } from '../middleware/isAdminOrOwner'
 
 const router = Router()
 
+// * Calculate time off days
+router.post('/timeoffs/calculate', TimeOffController.calculateDaysHandler)
 // * Add new time off
 router.post('/timeoffs/:userId', isAdminOrOwner, TimeOffController.createTimeOffHandler)
 // * Return all time off's

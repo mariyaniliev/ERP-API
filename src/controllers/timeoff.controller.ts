@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Prisma, TimeOffTypes } from '@prisma/client'
 import { TimeOffService } from '../service/timeoff.service'
 import { errorMessage } from '../utils/prismaerror.utils'
+import { calculateTimeOffDays } from '../utils/calculateTimeOffDays'
 import logger from '../utils/logger'
 
 export class TimeOffController {
@@ -104,6 +105,15 @@ export class TimeOffController {
       const typedError = error as Prisma.PrismaClientKnownRequestError
       logger.error(typedError)
       return res.status(404).send(errorMessage(typedError))
+    }
+  }
+  static async calculateDaysHandler(req: Request, res: Response) {
+    try {
+      const { startDate, endDate } = req.body
+      const { count } = await calculateTimeOffDays(startDate, endDate, true)
+      return res.send({ count })
+    } catch (error) {
+      return res.status(409).send(error)
     }
   }
 }
